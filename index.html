@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Examen de Ingreso PFA · Kilombo Roleplay</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Roboto+Condensed:wght@400;700&family=JetBrains+Mono:wght@400;700&display=swap');
+
+  :root{
+    --bg:#0a0d12; --bg2:#0f141b; --panel:#141b24; --panel2:#1a232e;
+    --line:#26303d; --line2:#33414f;
+    --blue:#2d7dd2; --blue-d:#1c5fa8; --gold:#e8b339;
+    --green:#3fb950; --green-d:#1f5a2a;
+    --amber:#d99a2b; --amber-d:#6b4d15;
+    --red:#e5484d; --red-d:#6b2025;
+    --txt:#e6edf3; --txt2:#9aa7b4; --txt3:#5e6b78;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    font-family:'Roboto Condensed',sans-serif;background:var(--bg);color:var(--txt);
+    line-height:1.5;-webkit-font-smoothing:antialiased;min-height:100vh;
+    background-image:
+      radial-gradient(circle at 15% 0%, rgba(45,125,210,.06), transparent 40%),
+      radial-gradient(circle at 85% 100%, rgba(232,179,57,.04), transparent 40%);
+  }
+  .wrap{max-width:920px;margin:0 auto;padding:0 16px 120px}
+
+  /* HEADER */
+  header{
+    border-bottom:2px solid var(--line);
+    background:linear-gradient(180deg, var(--bg2), transparent);
+    padding:28px 0 22px;margin-bottom:24px;position:relative;
+  }
+  header::after{content:"";position:absolute;bottom:-2px;left:0;width:130px;height:2px;background:var(--blue)}
+  .badge-row{display:flex;align-items:center;gap:14px;margin-bottom:6px}
+  .shield{
+    width:46px;height:54px;flex-shrink:0;
+    background:linear-gradient(180deg,var(--blue),var(--blue-d));
+    clip-path:polygon(50% 0,100% 18%,100% 62%,50% 100%,0 62%,0 18%);
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 0 0 2px var(--line2), 0 6px 18px rgba(45,125,210,.3);
+  }
+  .shield span{font-family:'Oswald',sans-serif;font-weight:700;font-size:18px;color:#fff;letter-spacing:1px;margin-top:-4px}
+  h1{font-family:'Oswald',sans-serif;font-weight:600;font-size:clamp(22px,4.5vw,32px);letter-spacing:.5px;text-transform:uppercase;line-height:1.05}
+  .sub{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--blue);letter-spacing:2px;text-transform:uppercase;margin-top:2px}
+  .header-actions{position:absolute;top:24px;right:0;display:flex;gap:8px}
+  .icon-btn{
+    background:var(--panel2);border:1px solid var(--line2);color:var(--txt2);
+    font-family:'Oswald',sans-serif;font-size:12px;text-transform:uppercase;letter-spacing:1px;
+    padding:7px 12px;border-radius:6px;cursor:pointer;transition:all .15s;
+    display:flex;align-items:center;gap:6px;
+  }
+  .icon-btn:hover{border-color:var(--blue);color:var(--blue)}
+
+  /* SETUP */
+  .setup{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:28px;margin-top:8px}
+  .setup h2{font-family:'Oswald',sans-serif;font-weight:500;font-size:18px;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
+  .setup p.hint{color:var(--txt2);font-size:15px;margin-bottom:22px}
+  .field{margin-bottom:18px}
+  .field label{display:block;font-family:'Oswald',sans-serif;font-size:13px;text-transform:uppercase;letter-spacing:1px;color:var(--txt2);margin-bottom:7px}
+  .field input, .field select{
+    width:100%;background:var(--bg);border:1px solid var(--line2);color:var(--txt);
+    font-family:'Roboto Condensed',sans-serif;font-size:17px;padding:11px 14px;border-radius:7px;transition:border-color .15s;
+  }
+  .field input:focus, .field select:focus{outline:none;border-color:var(--blue)}
+  .pct-row{display:flex;align-items:center;gap:14px}
+  .pct-row input{width:90px;text-align:center;font-family:'JetBrains Mono',monospace;font-weight:700}
+  .pct-row .pctnote{color:var(--txt3);font-size:14px}
+  .toggle-row{display:flex;gap:10px;margin-top:4px}
+  .toggle-opt{
+    flex:1;text-align:center;padding:12px;border-radius:7px;cursor:pointer;
+    background:var(--bg);border:1.5px solid var(--line2);color:var(--txt2);
+    font-family:'Oswald',sans-serif;font-size:14px;text-transform:uppercase;letter-spacing:.5px;transition:all .15s;
+  }
+  .toggle-opt.active{background:var(--blue-d);border-color:var(--blue);color:#fff}
+  .toggle-opt small{display:block;font-size:11px;opacity:.8;letter-spacing:0;text-transform:none;margin-top:2px}
+
+  .btn{font-family:'Oswald',sans-serif;font-weight:600;font-size:15px;text-transform:uppercase;letter-spacing:1.5px;cursor:pointer;border:none;border-radius:7px;padding:13px 26px;transition:all .15s}
+  .btn-primary{background:linear-gradient(180deg,var(--blue),var(--blue-d));color:#fff;box-shadow:0 4px 14px rgba(45,125,210,.3);width:100%;margin-top:8px}
+  .btn-primary:hover{filter:brightness(1.1);transform:translateY(-1px)}
+  .btn-primary:active{transform:translateY(0)}
+
+  .resume-banner{
+    background:rgba(45,125,210,.1);border:1px solid var(--blue-d);border-radius:9px;
+    padding:14px 16px;margin-bottom:20px;display:flex;align-items:center;gap:13px;flex-wrap:wrap;
+  }
+  .resume-banner .rb-txt{flex:1;min-width:160px;font-size:15px}
+  .resume-banner .rb-txt b{color:var(--blue);font-family:'Oswald',sans-serif;letter-spacing:.5px}
+  .resume-banner .rb-txt small{display:block;color:var(--txt3);font-size:13px}
+  .rb-btns{display:flex;gap:8px}
+  .btn-sm{font-family:'Oswald',sans-serif;font-weight:600;font-size:13px;text-transform:uppercase;letter-spacing:1px;padding:8px 14px;border-radius:6px;cursor:pointer;border:1px solid var(--line2);background:var(--panel2);color:var(--txt);transition:all .15s}
+  .btn-sm.green{border-color:var(--green);color:var(--green)}
+  .btn-sm.green:hover{background:var(--green-d);color:#fff}
+  .btn-sm:hover{border-color:var(--txt2)}
+
+  /* TOPBAR */
+  .topbar{position:sticky;top:0;z-index:50;background:rgba(10,13,18,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding:11px 0;margin:0 -16px 22px}
+  .topbar-inner{max-width:920px;margin:0 auto;padding:0 16px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+  .examinee{font-family:'Oswald',sans-serif;font-weight:500;font-size:16px;text-transform:uppercase;letter-spacing:.5px;flex:1;min-width:120px}
+  .examinee small{color:var(--txt3);font-size:11px;letter-spacing:1px;display:block}
+  .timer-box{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:15px;background:var(--panel2);border:1px solid var(--line2);padding:6px 12px;border-radius:6px;white-space:nowrap;display:flex;align-items:center;gap:6px}
+  .timer-box .dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:blink 1.4s infinite}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+  .live-score{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:14px;background:var(--panel2);border:1px solid var(--line2);padding:6px 12px;border-radius:6px;white-space:nowrap}
+  .live-score b{color:var(--blue)}
+  .live-score .need{color:var(--amber)}
+  .progress-track{height:5px;background:var(--panel2);border-radius:3px;margin-top:9px;overflow:hidden}
+  .progress-fill{height:100%;background:var(--blue);width:0;transition:width .3s;border-radius:3px}
+
+  /* PARTS */
+  .part{margin-bottom:30px}
+  .part-head{display:flex;align-items:center;gap:12px;margin-bottom:14px;padding-bottom:9px;border-bottom:1px solid var(--line)}
+  .part-num{font-family:'Oswald',sans-serif;font-weight:700;font-size:13px;background:var(--blue);color:#fff;padding:3px 10px;border-radius:4px;letter-spacing:1px}
+  .part-title{font-family:'Oswald',sans-serif;font-weight:500;font-size:17px;text-transform:uppercase;letter-spacing:1px;color:var(--txt)}
+  .part-meta{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--txt3)}
+
+  /* QUESTION CARDS */
+  .q{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--line2);border-radius:8px;padding:16px 18px;margin-bottom:12px;transition:border-color .2s,background .2s}
+  .q.done-bien{border-left-color:var(--green)}
+  .q.done-medio,.q.done-reg{border-left-color:var(--amber)}
+  .q.done-mal{border-left-color:var(--red)}
+  .q-head{display:flex;gap:11px;align-items:baseline;margin-bottom:9px}
+  .q-n{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:14px;color:var(--blue);flex-shrink:0;min-width:24px}
+  .q-text{font-size:17px;font-weight:700;line-height:1.35;flex:1}
+  .answer{background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:11px 13px;margin:10px 0 14px}
+  .answer-label{font-family:'Oswald',sans-serif;font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:var(--gold);margin-bottom:5px;display:flex;align-items:center;gap:6px}
+  .answer-label::before{content:"";width:12px;height:1px;background:var(--gold)}
+  .answer-text{font-size:15.5px;color:var(--txt2);line-height:1.55}
+  .answer-text .code{font-family:'JetBrains Mono',monospace;color:var(--blue);font-weight:700;font-size:14px}
+  .answer.evaluar{border-color:var(--amber-d);background:rgba(217,154,43,.05)}
+  .answer.evaluar .answer-label{color:var(--amber)}
+  .answer.evaluar .answer-label::before{background:var(--amber)}
+  .answer.evaluar .answer-text{font-style:italic}
+
+  /* MARK BUTTONS */
+  .marks{display:flex;gap:8px;flex-wrap:wrap}
+  .mark{flex:1;min-width:88px;font-family:'Oswald',sans-serif;font-weight:600;font-size:13px;text-transform:uppercase;letter-spacing:.8px;cursor:pointer;background:var(--panel2);border:1.5px solid var(--line2);color:var(--txt2);padding:9px 6px;border-radius:6px;transition:all .12s;display:flex;align-items:center;justify-content:center;gap:5px}
+  .mark:hover{border-color:var(--txt3);color:var(--txt)}
+  .mark .ic{font-size:14px;line-height:1}
+  .mark .kbd{font-family:'JetBrains Mono',monospace;font-size:10px;opacity:.5;border:1px solid currentColor;border-radius:3px;padding:0 4px;margin-left:2px}
+  .mark.sel-bien{background:var(--green-d);border-color:var(--green);color:#fff}
+  .mark.sel-medio,.mark.sel-reg{background:var(--amber-d);border-color:var(--amber);color:#fff}
+  .mark.sel-mal{background:var(--red-d);border-color:var(--red);color:#fff}
+
+  /* WEIGHT CHIP */
+  .w-chip{flex-shrink:0;align-self:flex-start;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:10px;letter-spacing:.5px;padding:3px 8px;border-radius:4px;white-space:nowrap;text-transform:uppercase}
+  .w-chip.w1{background:rgba(63,185,80,.12);color:var(--green);border:1px solid var(--green-d)}
+  .w-chip.w2{background:rgba(217,154,43,.12);color:var(--amber);border:1px solid var(--amber-d)}
+  .w-chip.w3{background:rgba(229,72,77,.14);color:var(--red);border:1px solid var(--red-d)}
+
+  /* LOCKED */
+  .q-locked{opacity:.4;filter:grayscale(.6);pointer-events:none;position:relative}
+  .q-locked::after{content:"NO EVALUADA";position:absolute;top:10px;right:12px;font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:1px;color:var(--txt3);background:var(--bg);padding:2px 8px;border-radius:4px;border:1px solid var(--line2)}
+
+  /* PRESENTATION MODE */
+  .pres-stage{display:none}
+  body.pres-mode .part{display:none}
+  body.pres-mode .pres-stage{display:block}
+  .pres-card{background:var(--panel);border:1px solid var(--line2);border-radius:14px;padding:38px 34px;min-height:340px;display:flex;flex-direction:column;position:relative;border-top:4px solid var(--blue)}
+  .pres-card.evaluar-card{border-top-color:var(--amber)}
+  .pres-top{display:flex;align-items:center;gap:12px;margin-bottom:24px}
+  .pres-counter{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:15px;color:var(--blue)}
+  .pres-part-tag{font-family:'Oswald',sans-serif;font-size:12px;text-transform:uppercase;letter-spacing:1.5px;color:var(--txt3);padding:3px 10px;border:1px solid var(--line2);border-radius:4px}
+  .pres-q{font-family:'Oswald',sans-serif;font-weight:600;font-size:clamp(22px,4vw,30px);line-height:1.25;margin-bottom:22px}
+  .pres-q .code{font-family:'JetBrains Mono',monospace;color:var(--blue)}
+  .pres-answer{background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:16px 18px;margin-bottom:auto}
+  .pres-answer.evaluar{border-color:var(--amber-d);background:rgba(217,154,43,.05)}
+  .pres-answer .answer-label{font-size:12px}
+  .pres-answer .answer-text{font-size:17px;line-height:1.6}
+  .pres-answer.evaluar .answer-text{font-style:italic}
+  .pres-marks{display:flex;gap:10px;margin-top:26px}
+  .pres-marks .mark{padding:14px 6px;font-size:15px}
+  .pres-nav{display:flex;align-items:center;gap:12px;margin-top:18px}
+  .pres-nav button{font-family:'Oswald',sans-serif;font-weight:600;font-size:14px;text-transform:uppercase;letter-spacing:1px;padding:11px 20px;border-radius:7px;cursor:pointer;border:1px solid var(--line2);background:var(--panel2);color:var(--txt);transition:all .15s}
+  .pres-nav button:hover:not(:disabled){border-color:var(--blue);color:var(--blue)}
+  .pres-nav button:disabled{opacity:.3;cursor:not-allowed}
+  .pres-nav .spacer{flex:1}
+  .pres-dots{display:flex;gap:5px;flex-wrap:wrap;justify-content:center;margin-top:20px}
+  .pres-dot{width:11px;height:11px;border-radius:50%;background:var(--panel2);border:1px solid var(--line2);cursor:pointer;transition:all .15s}
+  .pres-dot.bien{background:var(--green);border-color:var(--green)}
+  .pres-dot.medio,.pres-dot.reg{background:var(--amber);border-color:var(--amber)}
+  .pres-dot.mal{background:var(--red);border-color:var(--red)}
+  .pres-dot.current{transform:scale(1.4);box-shadow:0 0 0 2px var(--blue)}
+  .kbd-hint{text-align:center;color:var(--txt3);font-size:12px;font-family:'JetBrains Mono',monospace;margin-top:16px;letter-spacing:.5px}
+
+  /* RESULT */
+  .result{background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid var(--line2);border-radius:12px;padding:30px;margin-top:34px;text-align:center;position:relative;overflow:hidden}
+  .result::before{content:"";position:absolute;top:0;left:0;right:0;height:4px}
+  .result.aprob::before{background:var(--green)}
+  .result.desaprob::before{background:var(--red)}
+  .result-label{font-family:'Oswald',sans-serif;font-size:13px;text-transform:uppercase;letter-spacing:3px;color:var(--txt3);margin-bottom:14px}
+  .verdict{font-family:'Oswald',sans-serif;font-weight:700;font-size:clamp(34px,8vw,52px);text-transform:uppercase;letter-spacing:2px;line-height:1;margin-bottom:8px}
+  .result.aprob .verdict{color:var(--green)}
+  .result.desaprob .verdict{color:var(--red)}
+  .verdict-sub{color:var(--txt2);font-size:16px;margin-bottom:24px}
+  .lockout-flag{display:inline-block;background:var(--red);color:#fff;font-family:'Oswald',sans-serif;font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:1.5px;padding:7px 16px;border-radius:6px;margin-bottom:16px;box-shadow:0 4px 14px rgba(229,72,77,.35);animation:flagPulse 1.6s ease-in-out infinite}
+  @keyframes flagPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+  .score-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:8px}
+  @media(max-width:560px){.score-grid{grid-template-columns:repeat(2,1fr)}}
+  .score-box{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:14px 8px}
+  .score-box .num{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:26px;line-height:1}
+  .score-box .lbl{font-family:'Oswald',sans-serif;font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--txt3);margin-top:6px}
+  .score-box.b .num{color:var(--green)}
+  .score-box.m .num{color:var(--amber)}
+  .score-box.x .num{color:var(--red)}
+  .score-box.p .num{color:var(--blue)}
+  .nota-big{margin:22px 0;padding:18px;background:var(--bg);border:1px solid var(--line2);border-radius:10px}
+  .nota-big .nt{font-family:'Oswald',sans-serif;font-size:12px;text-transform:uppercase;letter-spacing:2px;color:var(--txt3)}
+  .nota-num{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:46px;line-height:1.1}
+  .nota-pct{font-size:15px;color:var(--txt2);font-family:'JetBrains Mono',monospace}
+  .meta-line{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--txt3);margin-top:14px}
+
+  .err-list{background:var(--bg);border:1px solid var(--red-d);border-radius:9px;padding:14px 16px;margin:18px 0 8px;text-align:left}
+  .err-list-title{font-family:'Oswald',sans-serif;font-size:12px;text-transform:uppercase;letter-spacing:2px;color:var(--red);margin-bottom:11px;display:flex;align-items:center;gap:7px}
+  .err-list-title::before{content:"";width:14px;height:2px;background:var(--red)}
+  .err-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--line)}
+  .err-row:last-child{border-bottom:none}
+  .err-q{flex:1;font-size:14.5px;color:var(--txt2);line-height:1.35}
+  .err-tag{flex-shrink:0;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:10px;letter-spacing:.5px;padding:3px 8px;border-radius:4px}
+  .err-tag.mal{background:var(--red-d);color:#fff}
+  .err-tag.med{background:var(--amber-d);color:#fff}
+
+  .actions{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
+  .btn-ghost{flex:1;min-width:130px;background:var(--panel2);border:1px solid var(--line2);color:var(--txt)}
+  .btn-ghost:hover{border-color:var(--blue);color:var(--blue)}
+
+  /* MODAL */
+  .modal-bg{position:fixed;inset:0;background:rgba(5,7,10,.8);backdrop-filter:blur(4px);z-index:200;display:none;align-items:flex-start;justify-content:center;padding:40px 16px;overflow-y:auto}
+  .modal-bg.show{display:flex}
+  .modal{background:var(--panel);border:1px solid var(--line2);border-radius:12px;max-width:760px;width:100%;padding:26px;position:relative}
+  .modal h2{font-family:'Oswald',sans-serif;font-weight:600;font-size:20px;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
+  .modal .msub{color:var(--txt2);font-size:14px;margin-bottom:20px}
+  .modal-close{position:absolute;top:18px;right:18px;background:var(--panel2);border:1px solid var(--line2);color:var(--txt2);width:32px;height:32px;border-radius:6px;cursor:pointer;font-size:18px;line-height:1;transition:all .15s}
+  .modal-close:hover{border-color:var(--red);color:var(--red)}
+
+  .confirm-modal{max-width:420px;text-align:center}
+  .confirm-modal .cm-ic{font-size:40px;margin-bottom:10px}
+  .confirm-modal h2{font-size:19px}
+  .confirm-modal p{color:var(--txt2);font-size:15px;margin:8px 0 22px}
+  .confirm-btns{display:flex;gap:10px}
+  .confirm-btns button{flex:1;font-family:'Oswald',sans-serif;font-weight:600;font-size:14px;text-transform:uppercase;letter-spacing:1px;padding:12px;border-radius:7px;cursor:pointer;border:1px solid var(--line2);transition:all .15s}
+  .cb-cancel{background:var(--panel2);color:var(--txt)}
+  .cb-cancel:hover{border-color:var(--txt2)}
+  .cb-confirm{background:var(--red-d);border-color:var(--red);color:#fff}
+  .cb-confirm:hover{filter:brightness(1.15)}
+
+  /* ADMIN EDITOR */
+  .adm-part{margin-bottom:22px}
+  .adm-part-title{font-family:'Oswald',sans-serif;font-size:14px;text-transform:uppercase;letter-spacing:1px;color:var(--blue);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+  .adm-q{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:14px;margin-bottom:10px}
+  .adm-q-head{display:flex;gap:10px;align-items:center;margin-bottom:10px}
+  .adm-q-num{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--blue);font-size:13px}
+  .adm-q textarea{width:100%;background:var(--panel);border:1px solid var(--line2);color:var(--txt);font-family:'Roboto Condensed',sans-serif;font-size:14px;padding:8px 10px;border-radius:6px;resize:vertical;min-height:38px;margin-bottom:8px}
+  .adm-q textarea:focus{outline:none;border-color:var(--blue)}
+  .adm-q .lbl-mini{font-family:'Oswald',sans-serif;font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--txt3);margin-bottom:3px}
+  .adm-q-foot{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .adm-weight{display:flex;gap:5px}
+  .adm-weight button{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;padding:5px 9px;border-radius:5px;cursor:pointer;border:1px solid var(--line2);background:var(--panel);color:var(--txt2);transition:all .12s}
+  .adm-weight button.sel1{background:var(--green-d);border-color:var(--green);color:#fff}
+  .adm-weight button.sel2{background:var(--amber-d);border-color:var(--amber);color:#fff}
+  .adm-weight button.sel3{background:var(--red-d);border-color:var(--red);color:#fff}
+  .adm-del{margin-left:auto;background:transparent;border:1px solid var(--red-d);color:var(--red);font-size:11px;font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.5px;padding:5px 10px;border-radius:5px;cursor:pointer;transition:all .12s}
+  .adm-del:hover{background:var(--red-d);color:#fff}
+  .adm-add{background:var(--panel2);border:1px dashed var(--line2);color:var(--txt2);width:100%;padding:10px;border-radius:7px;cursor:pointer;font-family:'Oswald',sans-serif;font-size:13px;text-transform:uppercase;letter-spacing:1px;transition:all .15s}
+  .adm-add:hover{border-color:var(--blue);color:var(--blue)}
+  .adm-foot{display:flex;gap:10px;margin-top:20px;position:sticky;bottom:0;background:var(--panel);padding-top:14px;border-top:1px solid var(--line)}
+  .adm-foot .btn{flex:1}
+  .btn-save{background:linear-gradient(180deg,var(--green),var(--green-d));color:#fff}
+  .btn-save:hover{filter:brightness(1.1)}
+  .btn-reset-adm{background:var(--panel2);border:1px solid var(--line2);color:var(--txt2)}
+  .btn-reset-adm:hover{border-color:var(--amber);color:var(--amber)}
+  .adm-eval-note{font-size:12px;color:var(--txt3);font-style:italic;margin-top:4px}
+
+  .hidden{display:none}
+  footer{text-align:center;color:var(--txt3);font-size:12px;font-family:'JetBrains Mono',monospace;letter-spacing:1px;margin-top:40px;padding-top:20px;border-top:1px solid var(--line)}
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--green-d);border:1px solid var(--green);color:#fff;padding:12px 22px;border-radius:8px;font-family:'Oswald',sans-serif;letter-spacing:.5px;z-index:300;transition:transform .3s;box-shadow:0 8px 24px rgba(0,0,0,.4)}
+  .toast.show{transform:translateX(-50%) translateY(0)}
+
+  /* DISCORD CHECK MESSAGE */
+  .dc-msg{font-family:'JetBrains Mono',monospace;font-size:13px;margin-top:8px;display:none}
+  .dc-msg.checking{display:block;color:var(--txt2)}
+  .dc-msg.ok{display:block;color:var(--green)}
+  .dc-msg.blocked{display:block;color:var(--red)}
+
+  /* BLOCK SCREEN */
+  .block-screen{background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid var(--red-d);border-radius:12px;padding:34px 28px;margin-top:8px;text-align:center;position:relative;overflow:hidden}
+  .block-screen::before{content:"";position:absolute;top:0;left:0;right:0;height:4px;background:var(--red)}
+  .block-icon{font-size:46px;margin-bottom:12px}
+  .block-title{font-family:'Oswald',sans-serif;font-weight:700;font-size:clamp(24px,5vw,34px);text-transform:uppercase;letter-spacing:1.5px;color:var(--red);line-height:1.1;margin-bottom:10px}
+  .block-sub{color:var(--txt2);font-size:16px;margin-bottom:20px;line-height:1.5}
+  .block-info{background:var(--bg);border:1px solid var(--line2);border-radius:10px;padding:18px;margin-bottom:22px;display:inline-block;min-width:260px}
+  .block-info .bi-row{display:flex;justify-content:space-between;gap:24px;padding:6px 0;font-size:14.5px}
+  .block-info .bi-row .bi-lbl{color:var(--txt3);font-family:'Oswald',sans-serif;text-transform:uppercase;font-size:12px;letter-spacing:1px}
+  .block-info .bi-row .bi-val{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--txt)}
+  .block-countdown{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:30px;color:var(--amber);margin:6px 0 2px}
+  .block-screen .btn{margin-top:4px}
+
+  /* SAVE STATUS */
+  .save-status{font-family:'JetBrains Mono',monospace;font-size:12.5px;margin-top:14px;min-height:18px;letter-spacing:.3px}
+  .save-status.saving{color:var(--txt2)}
+  .save-status.saved{color:var(--green)}
+  .save-status.failed{color:var(--amber)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="badge-row">
+      <div class="shield"><span>PFA</span></div>
+      <div>
+        <h1>Examen de Ingreso PFA</h1>
+        <div class="sub">Kilombo Roleplay · Toma Oral</div>
+      </div>
+    </div>
+    <div class="header-actions" id="headerActions">
+      <button class="icon-btn" onclick="openAdmin()">⚙ Editar preguntas</button>
+    </div>
+  </header>
+
+  <!-- SETUP -->
+  <div id="setup" class="setup">
+    <div id="resumeSlot"></div>
+    <h2>Nueva Toma de Examen</h2>
+    <p class="hint">Completá los datos y arrancá. Vas marcando cada pregunta y la nota se calcula sola.</p>
+    <div class="field">
+      <label>Nombre del aspirante</label>
+      <input type="text" id="examineeName" placeholder="Ej: Juan Pérez / ID en la ciudad" autocomplete="off">
+    </div>
+    <div class="field">
+      <label>Discord ID del aspirante</label>
+      <input type="text" id="discordId" placeholder="Ej: 123456789012345678" autocomplete="off" inputmode="numeric">
+      <div id="discordCheckMsg" class="dc-msg"></div>
+    </div>
+    <div class="field">
+      <label>Instructor que toma</label>
+      <input type="text" id="instructorName" placeholder="Tu nombre" autocomplete="off">
+    </div>
+    <div class="field">
+      <label>Nota mínima para aprobar</label>
+      <div class="pct-row">
+        <input type="number" id="passPct" value="70" min="1" max="100">
+        <span class="pctnote">% &nbsp;—&nbsp; recomendado 70%. Cambialo si desaprueba demasiada gente.</span>
+      </div>
+    </div>
+    <div class="field">
+      <label>Modo de toma</label>
+      <div class="toggle-row">
+        <div class="toggle-opt active" id="modeLista" onclick="setMode('lista')">Lista<small>Ves todo y scrolleás</small></div>
+        <div class="toggle-opt" id="modePres" onclick="setMode('pres')">Presentación<small>Una pregunta a la vez</small></div>
+      </div>
+    </div>
+    <button class="btn btn-primary" onclick="startExam()">Comenzar Examen ▸</button>
+  </div>
+
+  <!-- BLOCK SCREEN -->
+  <div id="blockScreen" class="hidden"></div>
+
+  <!-- EXAM -->
+  <div id="exam" class="hidden">
+    <div class="topbar">
+      <div class="topbar-inner">
+        <div class="examinee">
+          <small id="instLabel">INSTRUCTOR</small>
+          <span id="nameLabel">Aspirante</span>
+        </div>
+        <div class="timer-box"><span class="dot"></span><span id="timerDisplay">00:00</span></div>
+        <div class="live-score">
+          <span id="livePoints">0</span>/<span id="maxPointsLabel">0</span> pts ·
+          <span id="needLabel" class="need">faltan 0</span>
+        </div>
+      </div>
+      <div class="topbar-inner" style="margin-top:0">
+        <div class="progress-track" style="flex:1"><div class="progress-fill" id="progFill"></div></div>
+      </div>
+    </div>
+
+    <!-- list mode container -->
+    <div id="questions"></div>
+
+    <!-- presentation mode container -->
+    <div class="pres-stage" id="presStage"></div>
+
+    <div id="result"></div>
+
+    <footer>KILOMBO RP · SISTEMA DE EVALUACIÓN PFA</footer>
+  </div>
+
+</div>
+
+<!-- ADMIN MODAL -->
+<div class="modal-bg" id="adminModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeAdmin()">×</button>
+    <h2>Editar Preguntas</h2>
+    <p class="msub">Cambiá preguntas, respuestas y dificultad. Los cambios se guardan en este navegador. Las preguntas de la Parte 3 son de criterio (Bien/Regular/Mal).</p>
+    <div id="adminBody"></div>
+    <div class="adm-foot">
+      <button class="btn btn-reset-adm" onclick="resetAdminToDefault()">↺ Restaurar original</button>
+      <button class="btn btn-save" onclick="saveAdmin()">✓ Guardar cambios</button>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRM MODAL -->
+<div class="modal-bg" id="confirmModal">
+  <div class="modal confirm-modal">
+    <div class="cm-ic" id="cmIcon">⚠️</div>
+    <h2 id="cmTitle">¿Estás seguro?</h2>
+    <p id="cmText">Esta acción no se puede deshacer.</p>
+    <div class="confirm-btns">
+      <button class="cb-cancel" onclick="closeConfirm()">Cancelar</button>
+      <button class="cb-confirm" id="cmConfirmBtn">Sí, continuar</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast">Guardado</div>
+
+<script>
+/* ============ DEFAULT EXAM DATA ============ */
+const DEFAULT_DATA = {
+  part1: [
+    {q:"¿Qué es IC?", a:"Es todo lo que ocurre dentro del entorno de nuestro personaje.", w:1},
+    {q:"¿Qué es OOC?", a:"Todo lo que ocurre fuera del juego.", w:1},
+    {q:"¿Para qué se utilizan el <c>/me</c> y el <c>/do</c>? (2 ejemplos de cada uno)", a:"El <c>/me</c> describe acciones físicas, gestos o sentimientos del personaje que no están animados en el juego. El <c>/do</c> es un comando narrativo para describir el entorno, cosas que no se ven a simple vista o preguntar por el estado de algo/alguien.", w:2},
+    {q:"¿Qué es MG? (1 ejemplo)", a:"Usar información OOC dentro del juego para beneficio IC. Ejemplo: escuchar en Discord la ubicación de alguien y buscarlo IC.", w:1},
+    {q:"¿Qué es DM? (1 ejemplo)", a:"Hacer daño o matar a alguien sin motivo ni rol previo. Ejemplo: disparar sin interacción previa.", w:1},
+    {q:"¿Qué es PG? (1 ejemplo)", a:"Realizar acciones imposibles o sin lógica en la vida real. Ejemplo: tirarse de un edificio y seguir corriendo como si nada.", w:2},
+    {q:"¿Qué es VDM?", a:"Utilizar un vehículo como arma.", w:1},
+    {q:"¿Qué es RK?", a:"Regresar al lugar donde habías sido abatido para vengarte de quien te asesinó, sin respetar el PK.", w:2},
+    {q:"¿Qué es evadir rol?", a:"Abandonar un rol desconectándose, usando menú, guardando el vehículo en persecución o entrando a una propiedad para cortarlo.", w:2},
+    {q:"¿Qué es RDE?", a:"Rol de entorno: todo lo que nos envuelve. La ciudad está viva, hay gente en las calles y vecinos que miran por las ventanas (además de los NPC). Ej: en comisaría habría muchos policías además de los presentes en rol.", w:2},
+    {q:"¿Se puede mentir en el <c>/do</c>?", a:"No, no se puede mentir en el <c>/do</c>.", w:1},
+    {q:"¿Qué es el PK?", a:"Pérdida de memoria del personaje al ser abatido: se olvida de todo lo ocurrido en el trayecto previo del rol que lleva a su muerte.", w:1},
+    {q:"¿Qué es el PKT?", a:"Al abandonar una organización se pierde la memoria de la información interna, pero se recuerda haber pertenecido.", w:2},
+    {q:"¿Qué es el CK?", a:"Muerte total del personaje: se pierden todas las posesiones y bienes IC, y no se recuerda nada del personaje anterior.", w:2},
+    {q:"¿Qué es Fair Play?", a:"Juego justo: todo rol, agresivo o pasivo, debe desarrollarse respetando las normas básicas del rol, del servidor y de los propios usuarios involucrados, sean compañeros o adversarios.", w:2}
+  ],
+  part2: [
+    {q:"¿Qué es el H50?", a:"Es el encargado de asignar a los policías disponibles a los distintos robos.", w:2},
+    {q:"¿Cuáles son los derechos de un civil? ¿Cuándo deben leerse?", a:"Derecho a guardar silencio (todo lo que diga podrá y será usado en su contra), a comida y bebida si lo requiere, a atención médica si la precisa, y a una llamada de no más de 5 minutos en presencia de un oficial. Todos sus derechos se cumplen en comisaría. Se leen ANTES de ingresar a comisaría.", w:3},
+    {q:"¿Qué significan los códigos radiales <c>10-04</c>, <c>10-05</c> y <c>10-32</c>?", a:"<c>10-04</c>: Afirmativo · <c>10-05</c>: Negativo · <c>10-32</c>: Se necesita apoyo.", w:1},
+    {q:"¿Cómo negociarías con un atracador?", a:"Preguntar cuánto son, si hay rehenes o tiradores, e informar la cantidad de oficiales presentes.", w:2},
+    {q:"¿Cuál es el monto máximo que podés ofrecer por un compañero con rango Cadete?", a:"4.000.000 (cuatro millones).", w:1}
+  ],
+  part3: [
+    {q:"¿Cómo reaccionarías ante una orden de un alto mando?", a:"Evaluar el criterio del aspirante: acatar la orden, respetar la cadena de mando y la jerarquía.", w:3},
+    {q:"¿Cómo reaccionarías si te intentan secuestrar siendo un grupo más numeroso que el tuyo?", a:"Evaluar criterio: priorizar la integridad, no hacerse el héroe, valorar la situación de inferioridad numérica.", w:3},
+    {q:"¿Cómo reaccionarías si ves que están agrediendo a un civil?", a:"Evaluar criterio: intervención correcta, protección del civil, uso proporcional de la fuerza.", w:3},
+    {q:"¿Cómo reaccionarías si ves que le están apuntando a un compañero?", a:"Evaluar criterio: respuesta táctica adecuada, no exponer de más, dar voz de alto / cubrir al compañero.", w:3}
+  ]
+};
+
+/* ============ STORAGE KEYS ============ */
+const LS_QUESTIONS = 'pfa_exam_questions_v1';
+const LS_PROGRESS  = 'pfa_exam_progress_v1';
+
+/* safe localStorage wrappers (no-op si está bloqueado, ej. en sandbox) */
+function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
+function lsSet(k,v){ try{ localStorage.setItem(k,v); return true; }catch(e){ return false; } }
+function lsDel(k){ try{ localStorage.removeItem(k); }catch(e){} }
+
+/* ============ BACKEND API ============ */
+/* La API key vive en el backend (Railway), NUNCA en el navegador.
+   Acá solo le pegamos a nuestros endpoints. Cambiá BACKEND_URL por la
+   URL de tu deploy de Railway. */
+const BACKEND_URL = 'https://examen-pfa-backend-production.up.railway.app';
+
+/* Devuelve {status:'libre'|'aprobado'|'espera'|'error', last, msRestantes, msg}.
+   Reglas: si alguna vez aprobó -> 'aprobado' (bloqueo permanente).
+   Si desaprobó hace < 24h -> 'espera'. Sino -> 'libre'. */
+async function checkDiscordStatus(discordId){
+  try{
+    const r = await fetch(BACKEND_URL + '/api/check?discord_id=' + encodeURIComponent(discordId));
+    if(!r.ok){
+      const e = await r.json().catch(()=>({}));
+      return {status:'error', msg: e.error || ('Error ' + r.status)};
+    }
+    return await r.json();
+  }catch(err){
+    console.error('checkDiscordStatus', err);
+    return {status:'error', msg: 'No se pudo conectar al servidor'};
+  }
+}
+
+/* Inserta el registro del examen al terminar (vía backend) */
+async function saveExamRecord(aprobado, nota){
+  try{
+    const r = await fetch(BACKEND_URL + '/api/save', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        discord_id: sessionMeta.discordId || '',
+        nombre: sessionMeta.name || '',
+        instructor: sessionMeta.inst || '',
+        nota: Number(nota.toFixed(2)),
+        aprobado: !!aprobado
+      })
+    });
+    return r.ok;
+  }catch(err){
+    console.error('saveExamRecord', err);
+    return false;
+  }
+}
+
+/* ============ DATA LOADING ============ */
+let DATA = loadData();
+function loadData(){
+  const saved = lsGet(LS_QUESTIONS);
+  if(saved){
+    try{ const p = JSON.parse(saved); if(p.part1&&p.part2&&p.part3) return p; }catch(e){}
+  }
+  return JSON.parse(JSON.stringify(DEFAULT_DATA));
+}
+
+/* ============ STATE ============ */
+let state = {};        // index -> mark
+let weights = [];
+let metas = [];        // index -> {part, isEval}
+let allQ = [];         // flat list
+let totalQ = 0;
+let totalPoints = 0;
+let passPct = 70;
+let lockedOut = false;
+let mode = 'lista';    // 'lista' | 'pres'
+let presIndex = 0;
+let timerStart = null;
+let timerInterval = null;
+let elapsedSec = 0;
+let sessionMeta = {name:'', inst:'', discordId:''};
+let recordSaved = false;
+
+/* ============ MODE TOGGLE (setup) ============ */
+function setMode(m){
+  mode = m;
+  document.getElementById('modeLista').classList.toggle('active', m==='lista');
+  document.getElementById('modePres').classList.toggle('active', m==='pres');
+}
+
+/* ============ FLATTEN ============ */
+function buildFlat(){
+  allQ = []; weights = []; metas = [];
+  DATA.part1.forEach(x=>{allQ.push(x);weights.push(x.w);metas.push({part:1,isEval:false});});
+  DATA.part2.forEach(x=>{allQ.push(x);weights.push(x.w);metas.push({part:2,isEval:false});});
+  DATA.part3.forEach(x=>{allQ.push(x);weights.push(x.w);metas.push({part:3,isEval:true});});
+  totalQ = allQ.length;
+  totalPoints = weights.reduce((a,b)=>a+b,0);
+}
+
+/* ============ START ============ */
+async function startExam(resuming){
+  if(!resuming){
+    const nameVal = document.getElementById('examineeName').value.trim();
+    const discordVal = document.getElementById('discordId').value.trim();
+
+    // Discord ID obligatorio
+    if(!discordVal){
+      const msg = document.getElementById('discordCheckMsg');
+      msg.className = 'dc-msg blocked';
+      msg.textContent = '⚠ Tenés que poner el Discord ID del aspirante.';
+      document.getElementById('discordId').focus();
+      return;
+    }
+
+    // chequeo contra Supabase
+    const btn = document.querySelector('#setup .btn-primary');
+    const origBtn = btn.innerHTML;
+    btn.innerHTML = '⏳ Verificando...';
+    btn.disabled = true;
+    const msg = document.getElementById('discordCheckMsg');
+    msg.className = 'dc-msg checking';
+    msg.textContent = 'Consultando si ya rindió...';
+
+    const res = await checkDiscordStatus(discordVal);
+
+    btn.innerHTML = origBtn;
+    btn.disabled = false;
+
+    if(res.status === 'error'){
+      msg.className = 'dc-msg blocked';
+      msg.textContent = '✕ ' + (res.msg || 'Error de conexión') + '. Revisá internet y reintentá.';
+      return;
+    }
+    if(res.status === 'aprobado'){
+      showBlockScreen('aprobado', discordVal, nameVal, res);
+      return;
+    }
+    if(res.status === 'espera'){
+      showBlockScreen('espera', discordVal, nameVal, res);
+      return;
+    }
+    // status === 'libre' -> sigue
+    msg.className = 'dc-msg';
+    msg.textContent = '';
+
+    sessionMeta.name = nameVal || "Aspirante";
+    sessionMeta.inst = document.getElementById('instructorName').value.trim();
+    sessionMeta.discordId = discordVal;
+    passPct = parseInt(document.getElementById('passPct').value) || 70;
+    if(passPct < 1) passPct = 1; if(passPct > 100) passPct = 100;
+    state = {};
+    lockedOut = false;
+    presIndex = 0;
+    elapsedSec = 0;
+    recordSaved = false;
+  }
+  buildFlat();
+
+  document.getElementById('nameLabel').textContent = sessionMeta.name;
+  document.getElementById('instLabel').textContent = sessionMeta.inst ? ("INSTRUCTOR · " + sessionMeta.inst.toUpperCase()) : "INSTRUCTOR";
+  document.getElementById('maxPointsLabel').textContent = totalPoints;
+
+  document.getElementById('setup').classList.add('hidden');
+  document.getElementById('blockScreen').classList.add('hidden');
+  document.getElementById('headerActions').style.display = 'none';
+  document.getElementById('exam').classList.remove('hidden');
+
+  document.body.classList.toggle('pres-mode', mode==='pres');
+
+  renderList();
+  if(mode==='pres') renderPres();
+
+  startTimer();
+  update();
+  saveProgress();
+}
+
+/* ============ BLOCK SCREEN ============ */
+let blockCountdownInterval = null;
+function showBlockScreen(type, discordId, nombre, res){
+  const setup = document.getElementById('setup');
+  const block = document.getElementById('blockScreen');
+  setup.classList.add('hidden');
+  document.getElementById('headerActions').style.display = 'none';
+
+  let html = '';
+  if(type === 'aprobado'){
+    const fecha = res.last ? new Date(res.last).toLocaleString('es-AR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}) : '—';
+    html = `
+      <div class="block-icon">✅</div>
+      <div class="block-title">Ya Aprobó</div>
+      <div class="block-sub">Este aspirante ya aprobó el examen de ingreso.<br>No necesita volver a rendir.</div>
+      <div class="block-info">
+        <div class="bi-row"><span class="bi-lbl">Discord ID</span><span class="bi-val">${discordId}</span></div>
+        ${nombre?`<div class="bi-row"><span class="bi-lbl">Nombre</span><span class="bi-val">${nombre}</span></div>`:''}
+        <div class="bi-row"><span class="bi-lbl">Aprobó el</span><span class="bi-val">${fecha}</span></div>
+      </div>
+      <br>
+      <button class="btn btn-primary" style="max-width:320px" onclick="backToSetup()">◂ Volver</button>`;
+  } else if(type === 'espera'){
+    html = `
+      <div class="block-icon">⏳</div>
+      <div class="block-title">Tiene que Esperar</div>
+      <div class="block-sub">Este aspirante desaprobó hace poco.<br>Puede volver a rendir cuando pase el tiempo de espera.</div>
+      <div class="block-info">
+        <div class="bi-row"><span class="bi-lbl">Discord ID</span><span class="bi-val">${discordId}</span></div>
+        ${nombre?`<div class="bi-row"><span class="bi-lbl">Nombre</span><span class="bi-val">${nombre}</span></div>`:''}
+        <div class="bi-row"><span class="bi-lbl">Puede rendir en</span><span class="bi-val" id="cdVal">—</span></div>
+      </div>
+      <div class="block-countdown" id="blockCountdown">--:--:--</div>
+      <br>
+      <button class="btn btn-primary" style="max-width:320px" onclick="backToSetup()">◂ Volver</button>`;
+  }
+  block.innerHTML = html;
+  block.classList.remove('hidden');
+  window.scrollTo({top:0,behavior:'smooth'});
+
+  if(type === 'espera' && res.msRestantes){
+    startBlockCountdown(res.msRestantes);
+  }
+}
+
+function startBlockCountdown(msRestantes){
+  if(blockCountdownInterval) clearInterval(blockCountdownInterval);
+  const endTs = Date.now() + msRestantes;
+  function tick(){
+    const left = endTs - Date.now();
+    const cd = document.getElementById('blockCountdown');
+    const cdVal = document.getElementById('cdVal');
+    if(left <= 0){
+      if(cd) cd.textContent = '¡Ya puede rendir!';
+      if(cd) cd.style.color = 'var(--green)';
+      if(cdVal) cdVal.textContent = 'ahora';
+      clearInterval(blockCountdownInterval);
+      return;
+    }
+    const h = Math.floor(left/3600000);
+    const m = Math.floor((left%3600000)/60000);
+    const s = Math.floor((left%60000)/1000);
+    const txt = String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+    if(cd) cd.textContent = txt;
+    if(cdVal) cdVal.textContent = h+'h '+m+'m';
+  }
+  tick();
+  blockCountdownInterval = setInterval(tick, 1000);
+}
+
+function backToSetup(){
+  if(blockCountdownInterval) clearInterval(blockCountdownInterval);
+  document.getElementById('blockScreen').classList.add('hidden');
+  document.getElementById('blockScreen').innerHTML = '';
+  document.getElementById('setup').classList.remove('hidden');
+  document.getElementById('headerActions').style.display = 'flex';
+  const msg = document.getElementById('discordCheckMsg');
+  msg.className = 'dc-msg'; msg.textContent = '';
+  window.scrollTo({top:0});
+}
+
+/* ============ TIMER ============ */
+function startTimer(){
+  timerStart = Date.now() - elapsedSec*1000;
+  if(timerInterval) clearInterval(timerInterval);
+  timerInterval = setInterval(tickTimer, 1000);
+  tickTimer();
+}
+function tickTimer(){
+  elapsedSec = Math.floor((Date.now() - timerStart)/1000);
+  const m = Math.floor(elapsedSec/60), s = elapsedSec%60;
+  document.getElementById('timerDisplay').textContent =
+    String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+}
+function stopTimer(){ if(timerInterval){clearInterval(timerInterval);timerInterval=null;} }
+function fmtDuration(sec){
+  const m=Math.floor(sec/60), s=sec%60;
+  return m+'m '+String(s).padStart(2,'0')+'s';
+}
+
+/* ============ RENDER LIST MODE ============ */
+function renderList(){
+  const container = document.getElementById('questions');
+  container.innerHTML = '';
+  let idx = 0;
+  idx = renderPart(container, "Parte 1", "Normativa General de Rol", DATA.part1, idx, false);
+  idx = renderPart(container, "Parte 2", "Normativa de la PFA", DATA.part2, idx, false);
+  idx = renderPart(container, "Parte 3", "Situaciones · Evaluación", DATA.part3, idx, true);
+  Object.keys(state).forEach(i=>applyMarkVisual(parseInt(i), state[i]));
+}
+
+function renderPart(container, label, title, arr, startIdx, isEval){
+  const part = document.createElement('div');
+  part.className = 'part';
+  part.innerHTML = `<div class="part-head"><span class="part-num">${label}</span><span class="part-title">${title}</span><span class="part-meta">${arr.length} preg.</span></div>`;
+  arr.forEach((item, i) => {
+    const gi = startIdx + i;
+    const qNum = i + 1;
+    const ansClass = isEval ? 'answer evaluar' : 'answer';
+    const ansLabel = isEval ? 'Criterio a evaluar' : 'Respuesta correcta';
+    const answerText = fmtCodes(item.a);
+    const questionText = fmtCodes(item.q);
+    const wLabels = {1:'Básica',2:'Intermedia',3:'Clave'};
+    const wChip = `<span class="w-chip w${item.w}">${wLabels[item.w]} · ${item.w} ${item.w===1?'pt':'pts'}</span>`;
+    const marks = buildMarkButtons(gi, isEval, false);
+    const card = document.createElement('div');
+    card.className = 'q'; card.id = 'q'+gi;
+    card.innerHTML = `
+      <div class="q-head"><span class="q-n">${qNum}.</span><span class="q-text">${questionText}</span>${wChip}</div>
+      <div class="${ansClass}"><div class="answer-label">${ansLabel}</div><div class="answer-text">${answerText}</div></div>
+      <div class="marks">${marks}</div>`;
+    part.appendChild(card);
+  });
+  container.appendChild(part);
+  return startIdx + arr.length;
+}
+
+function buildMarkButtons(gi, isEval, isPres){
+  const pfx = isPres ? 'p' : '';
+  if(isEval){
+    return `
+      <button class="mark" id="${pfx}mk-${gi}-bien" data-i="${gi}" data-v="bien" onclick="mark(${gi},'bien')"><span class="ic">✓</span> Bien ${isPres?'<span class="kbd">1</span>':''}</button>
+      <button class="mark" id="${pfx}mk-${gi}-reg" data-i="${gi}" data-v="reg" onclick="mark(${gi},'reg')"><span class="ic">~</span> Regular ${isPres?'<span class="kbd">2</span>':''}</button>
+      <button class="mark" id="${pfx}mk-${gi}-mal" data-i="${gi}" data-v="mal" onclick="mark(${gi},'mal')"><span class="ic">✕</span> Mal ${isPres?'<span class="kbd">3</span>':''}</button>`;
+  }
+  return `
+    <button class="mark" id="${pfx}mk-${gi}-bien" data-i="${gi}" data-v="bien" onclick="mark(${gi},'bien')"><span class="ic">✓</span> Bien ${isPres?'<span class="kbd">1</span>':''}</button>
+    <button class="mark" id="${pfx}mk-${gi}-medio" data-i="${gi}" data-v="medio" onclick="mark(${gi},'medio')"><span class="ic">~</span> A medias ${isPres?'<span class="kbd">2</span>':''}</button>
+    <button class="mark" id="${pfx}mk-${gi}-mal" data-i="${gi}" data-v="mal" onclick="mark(${gi},'mal')"><span class="ic">✕</span> Mal ${isPres?'<span class="kbd">3</span>':''}</button>`;
+}
+
+function fmtCodes(s){
+  return s.replace(/<c>/g,'<span class="code">').replace(/<\/c>/g,'</span>');
+}
+
+/* ============ RENDER PRESENTATION MODE ============ */
+function renderPres(){
+  const stage = document.getElementById('presStage');
+  if(presIndex >= totalQ) presIndex = totalQ-1;
+  if(presIndex < 0) presIndex = 0;
+  const item = allQ[presIndex];
+  const meta = metas[presIndex];
+  const isEval = meta.isEval;
+  const partNames = {1:'Parte 1 · Normativa de Rol',2:'Parte 2 · Normativa PFA',3:'Parte 3 · Situación'};
+  const wLabels = {1:'Básica',2:'Intermedia',3:'Clave'};
+  const ansLabel = isEval ? 'Criterio a evaluar' : 'Respuesta correcta';
+
+  stage.innerHTML = `
+    <div class="pres-card ${isEval?'evaluar-card':''}">
+      <div class="pres-top">
+        <span class="pres-counter">Pregunta ${presIndex+1} / ${totalQ}</span>
+        <span class="pres-part-tag">${partNames[meta.part]}</span>
+        <span class="w-chip w${item.w}" style="margin-left:auto">${wLabels[item.w]} · ${item.w} ${item.w===1?'pt':'pts'}</span>
+      </div>
+      <div class="pres-q">${fmtCodes(item.q)}</div>
+      <div class="pres-answer ${isEval?'evaluar':''}">
+        <div class="answer-label">${ansLabel}</div>
+        <div class="answer-text">${fmtCodes(item.a)}</div>
+      </div>
+      <div class="pres-marks">${buildMarkButtons(presIndex, isEval, true)}</div>
+      <div class="pres-nav">
+        <button onclick="presPrev()" ${presIndex===0?'disabled':''}>◂ Anterior</button>
+        <div class="spacer"></div>
+        <button onclick="presNext()" ${presIndex===totalQ-1?'disabled':''}>Siguiente ▸</button>
+      </div>
+      <div class="pres-dots" id="presDots"></div>
+      <div class="kbd-hint">Atajos: [1] Bien · [2] Medias/Regular · [3] Mal · [←] [→] navegar</div>
+    </div>`;
+
+  const dots = document.getElementById('presDots');
+  for(let i=0;i<totalQ;i++){
+    const d = document.createElement('div');
+    d.className = 'pres-dot';
+    if(state[i]) d.classList.add(state[i]);
+    if(i===presIndex) d.classList.add('current');
+    d.onclick = ()=>{ presIndex=i; renderPres(); };
+    dots.appendChild(d);
+  }
+  if(state[presIndex]) applyMarkVisual(presIndex, state[presIndex]);
+}
+
+function presNext(){ if(presIndex<totalQ-1){presIndex++;renderPres();} }
+function presPrev(){ if(presIndex>0){presIndex--;renderPres();} }
+
+/* ============ MARK ============ */
+function mark(i, val){
+  state[i] = val;
+  applyMarkVisual(i, val);
+  if(mode==='pres'){
+    const dots = document.querySelectorAll('.pres-dot');
+    if(dots[i]){
+      dots[i].classList.remove('bien','medio','reg','mal');
+      dots[i].classList.add(val);
+    }
+  }
+  update();
+  saveProgress();
+  if(mode==='pres' && !lockedOut){
+    setTimeout(()=>{ if(presIndex<totalQ-1){presIndex++;renderPres();} }, 280);
+  }
+}
+
+function applyMarkVisual(i, val){
+  const card = document.getElementById('q'+i);
+  if(card){
+    card.classList.remove('done-bien','done-medio','done-mal','done-reg');
+    card.classList.add('done-'+val);
+    card.querySelectorAll('.mark').forEach(b=>{
+      b.classList.remove('sel-bien','sel-medio','sel-mal','sel-reg');
+      if(b.dataset.v===val) b.classList.add('sel-'+val);
+    });
+  }
+  ['bien','medio','reg','mal'].forEach(v=>{
+    const pb = document.getElementById('pmk-'+i+'-'+v);
+    if(pb){
+      pb.classList.remove('sel-bien','sel-medio','sel-mal','sel-reg');
+      if(v===val) pb.classList.add('sel-'+val);
+    }
+  });
+}
+
+/* ============ SCORING ============ */
+function calcPoints(){
+  let pts=0, answered=0, remaining=0, cBien=0, cMedio=0, cMal=0;
+  let wrongList=[];
+  for(let i=0;i<totalQ;i++){
+    const w=weights[i];
+    if(state[i]!==undefined){
+      answered++;
+      const v=state[i];
+      if(v==='bien'){pts+=w;cBien++;}
+      else if(v==='medio'||v==='reg'){pts+=w/2;cMedio++;wrongList.push({n:i,q:allQ[i].q,tipo:'medias',w});}
+      else if(v==='mal'){cMal++;wrongList.push({n:i,q:allQ[i].q,tipo:'mal',w});}
+    } else remaining+=w;
+  }
+  return {pts,answered,remaining,maxPossible:pts+remaining,cBien,cMedio,cMal,wrongList};
+}
+
+function fmt(n){ return Number.isInteger(n)?n.toString():n.toFixed(1); }
+
+/* ============ UPDATE ============ */
+function update(){
+  const r = calcPoints();
+  document.getElementById('livePoints').textContent = fmt(r.pts);
+  const needed = totalPoints*passPct/100;
+  const faltan = Math.max(0, needed - r.pts);
+  const needEl = document.getElementById('needLabel');
+  if(r.pts >= needed){
+    needEl.textContent = 'aprobado ✓';
+    needEl.style.color = 'var(--green)';
+  } else {
+    needEl.textContent = 'faltan '+fmt(faltan);
+    needEl.style.color = 'var(--amber)';
+  }
+  const pct = totalQ ? (r.answered/totalQ*100) : 0;
+  document.getElementById('progFill').style.width = pct + '%';
+
+  if(!lockedOut && r.answered>0 && r.maxPossible < needed){
+    lockedOut = true;
+    stopTimer();
+    showFailLockout(r, needed);
+    clearProgress();
+    return;
+  }
+  if(lockedOut) return;
+
+  if(r.answered === totalQ){
+    stopTimer();
+    showResult();
+    clearProgress();
+  } else {
+    document.getElementById('result').innerHTML = '';
+  }
+}
+
+/* ============ ERROR LIST ============ */
+function buildErrorList(wrongList){
+  if(wrongList.length===0) return '';
+  const rows = wrongList.map(item=>{
+    const qClean = item.q.replace(/<c>/g,'').replace(/<\/c>/g,'');
+    const tag = item.tipo==='mal' ? '<span class="err-tag mal">MAL</span>' : '<span class="err-tag med">A MEDIAS</span>';
+    return `<div class="err-row"><span class="err-q">${qClean}</span>${tag}</div>`;
+  }).join('');
+  return `<div class="err-list"><div class="err-list-title">Detalle de errores</div>${rows}</div>`;
+}
+
+/* ============ RESULTS ============ */
+function showResult(){
+  const r = calcPoints();
+  const pctScore = r.pts/totalPoints*100;
+  const passed = pctScore >= passPct;
+  const nota10 = r.pts/totalPoints*10;
+  const el = document.getElementById('result');
+  el.className = 'result ' + (passed?'aprob':'desaprob');
+  el.innerHTML = `
+    <div class="result-label">Resultado Final</div>
+    <div class="verdict">${passed?'Aprobado':'Desaprobado'}</div>
+    <div class="verdict-sub">${passed?'El aspirante alcanzó el mínimo requerido.':`No alcanzó el mínimo de ${passPct}% para ingresar.`}</div>
+    <div class="nota-big">
+      <div class="nt">Nota</div>
+      <div class="nota-num" style="color:${passed?'var(--green)':'var(--red)'}">${nota10.toFixed(1)}<span style="font-size:24px;color:var(--txt3)">/10</span></div>
+      <div class="nota-pct">${fmt(r.pts)}/${totalPoints} pts · ${pctScore.toFixed(1)}% · mínimo ${passPct}%</div>
+    </div>
+    <div class="score-grid">
+      <div class="score-box b"><div class="num">${r.cBien}</div><div class="lbl">Bien</div></div>
+      <div class="score-box m"><div class="num">${r.cMedio}</div><div class="lbl">A medias / Reg</div></div>
+      <div class="score-box x"><div class="num">${r.cMal}</div><div class="lbl">Mal</div></div>
+      <div class="score-box p"><div class="num">${fmt(r.pts)}</div><div class="lbl">Puntos / ${totalPoints}</div></div>
+    </div>
+    ${!passed ? buildErrorList(r.wrongList) : ''}
+    <div class="meta-line">Duración: ${fmtDuration(elapsedSec)} · ${sessionMeta.name}</div>
+    <div class="save-status" id="saveStatus"></div>
+    <div class="actions">
+      <button class="btn btn-ghost" onclick="copyResult(false)">📋 Copiar resumen</button>
+      <button class="btn btn-ghost" onclick="exportImage()">🖼 Bajar imagen</button>
+      <button class="btn btn-ghost" onclick="askNewExam()">↺ Nuevo examen</button>
+    </div>`;
+  el.scrollIntoView({behavior:'smooth',block:'start'});
+  persistRecord(passed, nota10);
+}
+
+/* Guarda el registro en Supabase una sola vez por examen */
+async function persistRecord(passed, nota10){
+  if(recordSaved) return;
+  recordSaved = true;
+  const st = document.getElementById('saveStatus');
+  if(st){ st.className='save-status saving'; st.textContent='⏳ Guardando registro...'; }
+  const ok = await saveExamRecord(passed, nota10);
+  const st2 = document.getElementById('saveStatus');
+  if(st2){
+    if(ok){ st2.className='save-status saved'; st2.textContent='✓ Registro guardado en la base'; }
+    else { st2.className='save-status failed'; st2.textContent='⚠ No se pudo guardar el registro (revisá conexión). El bloqueo de 24h podría no aplicar.'; recordSaved=false; }
+  }
+}
+
+function showFailLockout(r, needed){
+  const pctScore = r.pts/totalPoints*100;
+  const nota10 = r.pts/totalPoints*10;
+  for(let i=0;i<totalQ;i++){
+    if(state[i]===undefined){
+      const card = document.getElementById('q'+i);
+      if(card) card.classList.add('q-locked');
+    }
+  }
+  if(mode==='pres'){ document.body.classList.remove('pres-mode'); }
+
+  const el = document.getElementById('result');
+  el.className = 'result desaprob lockout';
+  el.innerHTML = `
+    <div class="lockout-flag">⛔ Examen finalizado automáticamente</div>
+    <div class="result-label">Resultado Final</div>
+    <div class="verdict">Desaprobado</div>
+    <div class="verdict-sub">Ya no es posible alcanzar el ${passPct}% aunque conteste lo que falta. Se cortó la toma en la pregunta ${r.answered}.</div>
+    <div class="nota-big">
+      <div class="nt">Nota hasta el corte</div>
+      <div class="nota-num" style="color:var(--red)">${nota10.toFixed(1)}<span style="font-size:24px;color:var(--txt3)">/10</span></div>
+      <div class="nota-pct">${fmt(r.pts)}/${totalPoints} pts · ${pctScore.toFixed(1)}% · necesitaba ${fmt(needed)} pts</div>
+    </div>
+    <div class="score-grid">
+      <div class="score-box b"><div class="num">${r.cBien}</div><div class="lbl">Bien</div></div>
+      <div class="score-box m"><div class="num">${r.cMedio}</div><div class="lbl">A medias / Reg</div></div>
+      <div class="score-box x"><div class="num">${r.cMal}</div><div class="lbl">Mal</div></div>
+      <div class="score-box p"><div class="num">${r.answered}/${totalQ}</div><div class="lbl">Respondidas</div></div>
+    </div>
+    ${buildErrorList(r.wrongList)}
+    <div class="meta-line">Duración: ${fmtDuration(elapsedSec)} · ${sessionMeta.name}</div>
+    <div class="save-status" id="saveStatus"></div>
+    <div class="actions">
+      <button class="btn btn-ghost" onclick="copyResult(true)">📋 Copiar resumen</button>
+      <button class="btn btn-ghost" onclick="exportImage()">🖼 Bajar imagen</button>
+      <button class="btn btn-ghost" onclick="askNewExam()">↺ Nuevo examen</button>
+    </div>`;
+  el.scrollIntoView({behavior:'smooth',block:'start'});
+  persistRecord(false, nota10);
+}
+
+/* ============ COPY (Discord-ready) ============ */
+function copyResult(wasLockout){
+  const r = calcPoints();
+  const pctScore = r.pts/totalPoints*100;
+  const nota10 = r.pts/totalPoints*10;
+  const passed = !wasLockout && pctScore >= passPct;
+  const estado = passed ? 'APROBADO ✅' : 'DESAPROBADO ❌';
+  let erroresTxt = '';
+  if(r.wrongList.length){
+    erroresTxt = '\nErrores:\n' + r.wrongList.map(it=>{
+      const qClean = it.q.replace(/<c>/g,'').replace(/<\/c>/g,'');
+      const short = qClean.length>55 ? qClean.slice(0,55)+'…' : qClean;
+      return `  • ${it.tipo==='mal'?'✕':'~'} ${short}`;
+    }).join('\n');
+  }
+  const cortLine = wasLockout ? `\n⛔ Corte automático en la pregunta ${r.answered}/${totalQ}` : '';
+  const txt =
+`📋 EXAMEN DE INGRESO PFA · KILOMBO RP
+━━━━━━━━━━━━━━━━━━━━
+Aspirante: ${sessionMeta.name}
+Instructor: ${sessionMeta.inst||'—'}
+Duración: ${fmtDuration(elapsedSec)}
+━━━━━━━━━━━━━━━━━━━━
+RESULTADO: ${estado}
+Nota: ${nota10.toFixed(1)}/10  (${pctScore.toFixed(1)}%)
+Puntos: ${fmt(r.pts)}/${totalPoints} · mínimo ${passPct}%${cortLine}
+━━━━━━━━━━━━━━━━━━━━
+✓ Bien: ${r.cBien}   ~ Medias: ${r.cMedio}   ✕ Mal: ${r.cMal}${erroresTxt}`;
+  navigator.clipboard.writeText(txt).then(()=>{
+    const btn = event.target.closest('button');
+    const orig = btn.innerHTML; btn.innerHTML='✓ Copiado';
+    setTimeout(()=>btn.innerHTML=orig,1800);
+  });
+}
+
+/* ============ EXPORT IMAGE ============ */
+function exportImage(){
+  const el = document.getElementById('result');
+  const btn = event.target.closest('button');
+  const orig = btn.innerHTML; btn.innerHTML='⏳ Generando...';
+  const prevBg = el.style.background;
+  el.style.background = '#141b24';
+  html2canvas(el, {backgroundColor:'#0a0d12', scale:2}).then(canvas=>{
+    el.style.background = prevBg;
+    const link = document.createElement('a');
+    const safeName = sessionMeta.name.replace(/[^a-z0-9]/gi,'_').slice(0,30);
+    link.download = 'examen_pfa_'+safeName+'.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+    btn.innerHTML = '✓ Descargado';
+    setTimeout(()=>btn.innerHTML=orig,1800);
+  }).catch(err=>{
+    el.style.background = prevBg;
+    btn.innerHTML = '✗ Error';
+    setTimeout(()=>btn.innerHTML=orig,1800);
+  });
+}
+
+/* ============ PROGRESS PERSISTENCE ============ */
+function saveProgress(){
+  if(lockedOut) return;
+  const r = calcPoints();
+  if(r.answered===0 || r.answered===totalQ) return;
+  const payload = {
+    name: sessionMeta.name, inst: sessionMeta.inst, discordId: sessionMeta.discordId, passPct, mode,
+    state, presIndex, elapsedSec, ts: Date.now()
+  };
+  lsSet(LS_PROGRESS, JSON.stringify(payload));
+}
+function clearProgress(){ lsDel(LS_PROGRESS); }
+
+function checkResume(){
+  const saved = lsGet(LS_PROGRESS);
+  if(!saved) return;
+  let p; try{ p = JSON.parse(saved); }catch(e){ return; }
+  if(!p.state || Object.keys(p.state).length===0) return;
+  const answered = Object.keys(p.state).length;
+  const when = new Date(p.ts);
+  const slot = document.getElementById('resumeSlot');
+  slot.innerHTML = `
+    <div class="resume-banner">
+      <div class="rb-txt">
+        <b>Examen sin terminar</b>
+        <small>${p.name} · ${answered} preguntas marcadas · ${when.toLocaleString('es-AR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})}</small>
+      </div>
+      <div class="rb-btns">
+        <button class="btn-sm green" onclick="resumeExam()">▸ Retomar</button>
+        <button class="btn-sm" onclick="discardResume()">Descartar</button>
+      </div>
+    </div>`;
+}
+function resumeExam(){
+  const saved = lsGet(LS_PROGRESS);
+  if(!saved) return;
+  const p = JSON.parse(saved);
+  sessionMeta.name = p.name; sessionMeta.inst = p.inst; sessionMeta.discordId = p.discordId || '';
+  passPct = p.passPct; mode = p.mode || 'lista';
+  state = p.state; presIndex = p.presIndex||0; elapsedSec = p.elapsedSec||0;
+  lockedOut = false;
+  recordSaved = false;
+  startExam(true);
+}
+function discardResume(){
+  clearProgress();
+  document.getElementById('resumeSlot').innerHTML = '';
+}
+
+/* ============ NEW EXAM ============ */
+function askNewExam(){
+  showConfirm('↺','Nuevo examen','Vas a empezar una toma nueva. El resultado actual ya lo podés copiar antes de salir.', ()=>{
+    doResetExam();
+  });
+}
+function doResetExam(){
+  state = {}; lockedOut = false; presIndex = 0; elapsedSec = 0;
+  recordSaved = false;
+  stopTimer();
+  clearProgress();
+  document.body.classList.remove('pres-mode');
+  document.getElementById('exam').classList.add('hidden');
+  document.getElementById('result').innerHTML = '';
+  document.getElementById('setup').classList.remove('hidden');
+  document.getElementById('headerActions').style.display = 'flex';
+  document.getElementById('examineeName').value='';
+  document.getElementById('discordId').value='';
+  document.getElementById('discordCheckMsg').className='dc-msg';
+  document.getElementById('discordCheckMsg').textContent='';
+  document.getElementById('resumeSlot').innerHTML='';
+  window.scrollTo({top:0});
+}
+
+/* ============ CONFIRM MODAL ============ */
+let confirmCallback = null;
+function showConfirm(icon, title, text, cb){
+  document.getElementById('cmIcon').textContent = icon;
+  document.getElementById('cmTitle').textContent = title;
+  document.getElementById('cmText').textContent = text;
+  confirmCallback = cb;
+  document.getElementById('confirmModal').classList.add('show');
+}
+function closeConfirm(){ document.getElementById('confirmModal').classList.remove('show'); confirmCallback=null; }
+document.getElementById('cmConfirmBtn').onclick = ()=>{ if(confirmCallback)confirmCallback(); closeConfirm(); };
+
+/* ============ ADMIN EDITOR ============ */
+let adminDraft = null;
+function openAdmin(){
+  adminDraft = JSON.parse(JSON.stringify(DATA));
+  renderAdmin();
+  document.getElementById('adminModal').classList.add('show');
+}
+function closeAdmin(){ document.getElementById('adminModal').classList.remove('show'); }
+
+function renderAdmin(){
+  const body = document.getElementById('adminBody');
+  body.innerHTML = '';
+  body.appendChild(adminPartBlock('part1','Parte 1 · Normativa General de Rol', false));
+  body.appendChild(adminPartBlock('part2','Parte 2 · Normativa de la PFA', false));
+  body.appendChild(adminPartBlock('part3','Parte 3 · Situaciones (criterio)', true));
+}
+
+function adminPartBlock(key, title, isEval){
+  const wrap = document.createElement('div');
+  wrap.className = 'adm-part';
+  wrap.innerHTML = `<div class="adm-part-title">${title}</div>`;
+  adminDraft[key].forEach((item, i)=>{
+    const q = document.createElement('div');
+    q.className = 'adm-q';
+    q.innerHTML = `
+      <div class="adm-q-head"><span class="adm-q-num">${i+1}.</span>
+        <div class="lbl-mini" style="margin:0">Pregunta</div></div>
+      <textarea data-k="${key}" data-i="${i}" data-f="q" oninput="admEdit(this)">${item.q}</textarea>
+      <div class="lbl-mini">${isEval?'Criterio a evaluar':'Respuesta correcta'}</div>
+      <textarea data-k="${key}" data-i="${i}" data-f="a" oninput="admEdit(this)">${item.a}</textarea>
+      <div class="adm-q-foot">
+        <span class="lbl-mini" style="margin:0">Dificultad:</span>
+        <div class="adm-weight">
+          <button class="${item.w===1?'sel1':''}" onclick="admWeight('${key}',${i},1)">1 Básica</button>
+          <button class="${item.w===2?'sel2':''}" onclick="admWeight('${key}',${i},2)">2 Inter</button>
+          <button class="${item.w===3?'sel3':''}" onclick="admWeight('${key}',${i},3)">3 Clave</button>
+        </div>
+        <button class="adm-del" onclick="admDelete('${key}',${i})">✕ Borrar</button>
+      </div>`;
+    wrap.appendChild(q);
+  });
+  const addBtn = document.createElement('button');
+  addBtn.className = 'adm-add';
+  addBtn.textContent = '+ Agregar pregunta';
+  addBtn.onclick = ()=>admAdd(key, isEval);
+  wrap.appendChild(addBtn);
+  if(isEval){
+    const note = document.createElement('div');
+    note.className = 'adm-eval-note';
+    note.textContent = 'Tip: usá <c>texto</c> para resaltar comandos o códigos en azul (ej: <c>/me</c>).';
+    wrap.appendChild(note);
+  }
+  return wrap;
+}
+
+function admEdit(ta){
+  const k=ta.dataset.k, i=parseInt(ta.dataset.i), f=ta.dataset.f;
+  adminDraft[k][i][f] = ta.value;
+}
+function admWeight(k,i,w){
+  adminDraft[k][i].w = w;
+  renderAdmin();
+}
+function admDelete(k,i){
+  if(adminDraft[k].length<=1){ toast('No podés dejar la parte vacía'); return; }
+  adminDraft[k].splice(i,1);
+  renderAdmin();
+}
+function admAdd(k, isEval){
+  adminDraft[k].push({q:'Nueva pregunta', a:isEval?'Criterio a evaluar...':'Respuesta correcta...', w:isEval?3:1});
+  renderAdmin();
+  const modal = document.querySelector('#adminModal .modal');
+  modal.scrollTop = modal.scrollHeight;
+}
+function saveAdmin(){
+  DATA = JSON.parse(JSON.stringify(adminDraft));
+  const ok = lsSet(LS_QUESTIONS, JSON.stringify(DATA));
+  buildFlat();
+  closeAdmin();
+  toast(ok ? '✓ Preguntas guardadas' : '✓ Aplicado (no persiste en este entorno)');
+}
+function resetAdminToDefault(){
+  showConfirm('↺','Restaurar original','Esto descarta tus cambios y vuelve a las preguntas originales del examen.', ()=>{
+    adminDraft = JSON.parse(JSON.stringify(DEFAULT_DATA));
+    renderAdmin();
+  });
+}
+
+/* ============ TOAST ============ */
+let toastTimer=null;
+function toast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  if(toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>t.classList.remove('show'),2400);
+}
+
+/* ============ KEYBOARD SHORTCUTS ============ */
+document.addEventListener('keydown', (e)=>{
+  const examOpen = !document.getElementById('exam').classList.contains('hidden');
+  const modalOpen = document.getElementById('adminModal').classList.contains('show') || document.getElementById('confirmModal').classList.contains('show');
+  if(!examOpen || !document.body.classList.contains('pres-mode') || modalOpen || lockedOut) return;
+  if(['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)) return;
+
+  if(e.key==='1'){ e.preventDefault(); mark(presIndex,'bien'); }
+  else if(e.key==='2'){ e.preventDefault(); mark(presIndex, metas[presIndex].isEval?'reg':'medio'); }
+  else if(e.key==='3'){ e.preventDefault(); mark(presIndex,'mal'); }
+  else if(e.key==='ArrowRight'){ e.preventDefault(); presNext(); }
+  else if(e.key==='ArrowLeft'){ e.preventDefault(); presPrev(); }
+});
+
+/* ============ WARN BEFORE LEAVING ============ */
+window.addEventListener('beforeunload', (e)=>{
+  const examOpen = !document.getElementById('exam').classList.contains('hidden');
+  const r = examOpen ? calcPoints() : {answered:0};
+  if(examOpen && !lockedOut && r.answered>0 && r.answered<totalQ){
+    e.preventDefault();
+    e.returnValue = '';
+  }
+});
+
+/* ============ INIT ============ */
+buildFlat();
+checkResume();
+</script>
+</body>
+</html>
