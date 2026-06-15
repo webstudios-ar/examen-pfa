@@ -17,7 +17,8 @@
     --red:#e5484d; --red-d:#6b2025;
     --txt:#e6edf3; --txt2:#9aa7b4; --txt3:#5e6b78;
   }
-  *{margin:0;padding:0;box-sizing:border-box}
+  *{margin:0;padding:0;box-sizing:border-box;user-select:none}
+  input,textarea,select{user-select:text!important}
   body{
     font-family:'Roboto Condensed',sans-serif;background:var(--bg);color:var(--txt);
     line-height:1.5;-webkit-font-smoothing:antialiased;min-height:100vh;
@@ -60,7 +61,7 @@
   .setup p.hint{color:var(--txt2);font-size:15px;margin-bottom:22px}
   .field{margin-bottom:18px}
   .field label{display:block;font-family:'Oswald',sans-serif;font-size:13px;text-transform:uppercase;letter-spacing:1px;color:var(--txt2);margin-bottom:7px}
-  .field input, .field select{
+  .field input, .field select{user-select:text;
     width:100%;background:var(--bg);border:1px solid var(--line2);color:var(--txt);
     font-family:'Roboto Condensed',sans-serif;font-size:17px;padding:11px 14px;border-radius:7px;transition:border-color .15s;
   }
@@ -117,17 +118,17 @@
   .part-meta{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--txt3)}
 
   /* QUESTION CARDS */
-  .q{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--line2);border-radius:8px;padding:16px 18px;margin-bottom:12px;transition:border-color .2s,background .2s}
+  .q{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--line2);border-radius:8px;padding:16px 18px;margin-bottom:12px;transition:border-color .2s,background .2s;user-select:none}
   .q.done-bien{border-left-color:var(--green)}
   .q.done-medio,.q.done-reg{border-left-color:var(--amber)}
   .q.done-mal{border-left-color:var(--red)}
   .q-head{display:flex;gap:11px;align-items:baseline;margin-bottom:9px}
   .q-n{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:14px;color:var(--blue);flex-shrink:0;min-width:24px}
-  .q-text{font-size:17px;font-weight:700;line-height:1.35;flex:1}
+  .q-text{font-size:17px;font-weight:700;line-height:1.35;flex:1;user-select:none;cursor:default}
   .answer{background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:11px 13px;margin:10px 0 14px}
   .answer-label{font-family:'Oswald',sans-serif;font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:var(--gold);margin-bottom:5px;display:flex;align-items:center;gap:6px}
   .answer-label::before{content:"";width:12px;height:1px;background:var(--gold)}
-  .answer-text{font-size:15.5px;color:var(--txt2);line-height:1.55}
+  .answer-text{font-size:15.5px;color:var(--txt2);line-height:1.55;user-select:none;cursor:default}
   .answer-text .code{font-family:'JetBrains Mono',monospace;color:var(--blue);font-weight:700;font-size:14px}
   .answer.evaluar{border-color:var(--amber-d);background:rgba(217,154,43,.05)}
   .answer.evaluar .answer-label{color:var(--amber)}
@@ -168,7 +169,7 @@
   .pres-answer{background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:16px 18px;margin-bottom:auto}
   .pres-answer.evaluar{border-color:var(--amber-d);background:rgba(217,154,43,.05)}
   .pres-answer .answer-label{font-size:12px}
-  .pres-answer .answer-text{font-size:17px;line-height:1.6}
+  .pres-answer .answer-text{font-size:17px;line-height:1.6;user-select:none;cursor:default}
   .pres-answer.evaluar .answer-text{font-style:italic}
   .pres-marks{display:flex;gap:10px;margin-top:26px}
   .pres-marks .mark{padding:14px 6px;font-size:15px}
@@ -229,7 +230,9 @@
   /* MODAL */
   .modal-bg{position:fixed;inset:0;background:rgba(5,7,10,.8);backdrop-filter:blur(4px);z-index:200;display:none;align-items:flex-start;justify-content:center;padding:40px 16px;overflow-y:auto}
   .modal-bg.show{display:flex}
-  .modal{background:var(--panel);border:1px solid var(--line2);border-radius:12px;max-width:760px;width:100%;padding:26px;position:relative}
+  .modal{background:var(--panel);border:1px solid var(--line2);border-radius:12px;max-width:760px;width:100%;padding:26px;position:relative;display:flex;flex-direction:column;max-height:calc(100vh - 80px)}
+  #adminModal .modal{overflow:hidden}
+  #adminBody{overflow-y:auto;flex:1;padding-right:4px}
   .modal h2{font-family:'Oswald',sans-serif;font-weight:600;font-size:20px;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
   .modal .msub{color:var(--txt2);font-size:14px;margin-bottom:20px}
   .modal-close{position:absolute;top:18px;right:18px;background:var(--panel2);border:1px solid var(--line2);color:var(--txt2);width:32px;height:32px;border-radius:6px;cursor:pointer;font-size:18px;line-height:1;transition:all .15s}
@@ -265,7 +268,7 @@
   .adm-del:hover{background:var(--red-d);color:#fff}
   .adm-add{background:var(--panel2);border:1px dashed var(--line2);color:var(--txt2);width:100%;padding:10px;border-radius:7px;cursor:pointer;font-family:'Oswald',sans-serif;font-size:13px;text-transform:uppercase;letter-spacing:1px;transition:all .15s}
   .adm-add:hover{border-color:var(--blue);color:var(--blue)}
-  .adm-foot{display:flex;gap:10px;margin-top:20px;position:sticky;bottom:0;background:var(--panel);padding-top:14px;border-top:1px solid var(--line)}
+  .adm-foot{display:flex;gap:10px;margin-top:0;padding-top:14px;border-top:1px solid var(--line);flex-shrink:0;background:var(--panel)}
   .adm-foot .btn{flex:1}
   .btn-save{background:linear-gradient(180deg,var(--green),var(--green-d));color:#fff}
   .btn-save:hover{filter:brightness(1.1)}
@@ -316,7 +319,7 @@
       </div>
     </div>
     <div class="header-actions" id="headerActions">
-      <button class="icon-btn" onclick="openAdmin()">⚙ Editar preguntas</button>
+      <button class="icon-btn" id="editQBtn" onclick="openEditAdminAuth()">⚙ Editar preguntas</button>
     </div>
   </header>
 
@@ -341,8 +344,8 @@
     <div class="field">
       <label>Nota mínima para aprobar</label>
       <div class="pct-row">
-        <input type="number" id="passPct" value="70" min="1" max="100">
-        <span class="pctnote">% &nbsp;—&nbsp; recomendado 70%. Cambialo si desaprueba demasiada gente.</span>
+        <input type="number" id="passPct" value="70" min="1" max="100" disabled style="opacity:.5;cursor:not-allowed;">
+        <span class="pctnote">% &nbsp;&nbsp;<button type="button" id="pctLockBtn" onclick="adminUnlockPct()" title="Solo admins pueden modificar esto" style="background:none;border:1px solid var(--line2);border-radius:4px;color:var(--txt3);font-size:12px;padding:2px 7px;cursor:pointer;font-family:JetBrains Mono,monospace;">🔒 admin</button></span>
       </div>
     </div>
     <div class="field">
@@ -541,6 +544,55 @@ let allQ = [];         // flat list
 let totalQ = 0;
 let totalPoints = 0;
 let passPct = 70;
+
+/* ---- Admin unlock para el % de aprobación ---- */
+function adminUnlockPct(){
+  document.getElementById('adminUnlockModal').style.display = 'flex';
+  document.getElementById('adminUnlockInput').value = '';
+  document.getElementById('adminUnlockErr').style.display = 'none';
+  setTimeout(()=>document.getElementById('adminUnlockInput').focus(), 80);
+}
+
+function closeAdminUnlockModal(){
+  document.getElementById('adminUnlockModal').style.display = 'none';
+}
+
+async function submitAdminUnlock(){
+  const adminId = document.getElementById('adminUnlockInput').value.trim();
+  const err = document.getElementById('adminUnlockErr');
+  const confirmBtn = document.getElementById('adminUnlockConfirm');
+  if(!adminId){ err.textContent='Ingresá tu Discord ID.'; err.style.display='block'; return; }
+  confirmBtn.textContent = 'Verificando...';
+  confirmBtn.disabled = true;
+  err.style.display = 'none';
+  try{
+    const r = await fetch(BACKEND_URL + '/api/admin/stats', {
+      headers: { 'X-Admin-Id': adminId }
+    });
+    if(r.ok){
+      const field = document.getElementById('passPct');
+      field.disabled = false;
+      field.style.opacity = '1';
+      field.style.cursor = 'auto';
+      const btn = document.getElementById('pctLockBtn');
+      btn.textContent = '🔓 admin';
+      btn.style.color = 'var(--green)';
+      btn.onclick = null;
+      closeAdminUnlockModal();
+      field.focus();
+    } else {
+      err.textContent = '✕ Discord ID no autorizado.';
+      err.style.display = 'block';
+      confirmBtn.textContent = 'Confirmar';
+      confirmBtn.disabled = false;
+    }
+  } catch(e){
+    err.textContent = '✕ Error de conexión. Reintentá.';
+    err.style.display = 'block';
+    confirmBtn.textContent = 'Confirmar';
+    confirmBtn.disabled = false;
+  }
+}
 let lockedOut = false;
 let mode = 'lista';    // 'lista' | 'pres'
 let presIndex = 0;
@@ -1186,6 +1238,40 @@ document.getElementById('cmConfirmBtn').onclick = ()=>{ if(confirmCallback)confi
 
 /* ============ ADMIN EDITOR ============ */
 let adminDraft = null;
+/* ── Protección admin para editar preguntas ── */
+let editUnlocked = false;
+function openEditAdminAuth(){
+  if(editUnlocked){ openAdmin(); return; }
+  document.getElementById('editAuthModal').style.display = 'flex';
+  document.getElementById('editAuthInput').value = '';
+  document.getElementById('editAuthErr').style.display = 'none';
+  setTimeout(()=>document.getElementById('editAuthInput').focus(), 80);
+}
+function closeEditAuthModal(){
+  document.getElementById('editAuthModal').style.display = 'none';
+}
+async function submitEditAuth(){
+  const adminId = document.getElementById('editAuthInput').value.trim();
+  const err = document.getElementById('editAuthErr');
+  const btn = document.getElementById('editAuthConfirm');
+  if(!adminId){ err.textContent='Ingresa tu Discord ID.'; err.style.display='block'; return; }
+  btn.textContent='Verificando...'; btn.disabled=true; err.style.display='none';
+  try{
+    const r = await fetch(BACKEND_URL+'/api/admin/stats',{headers:{'X-Admin-Id':adminId}});
+    if(r.ok){
+      editUnlocked = true;
+      closeEditAuthModal();
+      openAdmin();
+    } else {
+      err.textContent='✕ Discord ID no autorizado.'; err.style.display='block';
+      btn.textContent='Confirmar'; btn.disabled=false;
+    }
+  } catch(e){
+    err.textContent='✕ Error de conexion. Reintentar.'; err.style.display='block';
+    btn.textContent='Confirmar'; btn.disabled=false;
+  }
+}
+
 function openAdmin(){
   adminDraft = JSON.parse(JSON.stringify(DATA));
   renderAdmin();
@@ -1310,5 +1396,37 @@ window.addEventListener('beforeunload', (e)=>{
 buildFlat();
 checkResume();
 </script>
+
+<!-- Modal desbloqueo admin % -->
+<div id="adminUnlockModal" style="display:none;position:fixed;inset:0;background:rgba(5,7,10,.85);backdrop-filter:blur(4px);z-index:300;align-items:center;justify-content:center;padding:24px">
+  <div style="background:var(--panel);border:1px solid var(--line2);border-radius:12px;padding:28px 28px 24px;max-width:400px;width:100%;position:relative">
+    <button onclick="closeAdminUnlockModal()" style="position:absolute;top:12px;right:12px;background:var(--panel2);border:1px solid var(--line2);color:var(--txt2);width:28px;height:28px;border-radius:6px;cursor:pointer;font-size:16px;line-height:1">x</button>
+    <div style="font-family:'Oswald',sans-serif;font-weight:600;font-size:16px;text-transform:uppercase;letter-spacing:1px;color:var(--txt);margin-bottom:6px">Acceso de Administrador</div>
+    <div style="font-size:14px;color:var(--txt2);margin-bottom:20px">Ingresa tu Discord ID para desbloquear el porcentaje de aprobacion.</div>
+    <label style="display:block;font-family:'Oswald',sans-serif;font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--txt2);margin-bottom:7px">Discord ID</label>
+    <input id="adminUnlockInput" type="text" inputmode="numeric" placeholder="Ej: 696160444083077121" autocomplete="off"
+      onkeydown="if(event.key==='Enter')submitAdminUnlock();if(event.key==='Escape')closeAdminUnlockModal();"
+      style="width:100%;background:var(--bg);border:1px solid var(--line2);color:var(--txt);font-family:'JetBrains Mono',monospace;font-size:16px;padding:11px 14px;border-radius:7px;outline:none;margin-bottom:12px">
+    <div id="adminUnlockErr" style="display:none;color:var(--red);font-family:'JetBrains Mono',monospace;font-size:13px;margin-bottom:12px"></div>
+    <button id="adminUnlockConfirm" onclick="submitAdminUnlock()"
+      style="width:100%;background:linear-gradient(180deg,var(--blue),var(--blue-d));color:#fff;border:none;border-radius:7px;padding:12px;font-family:'Oswald',sans-serif;font-weight:600;font-size:14px;text-transform:uppercase;letter-spacing:1.5px;cursor:pointer">Confirmar</button>
+  </div>
+</div>
+
+<!-- Modal auth editar preguntas -->
+<div id="editAuthModal" style="display:none;position:fixed;inset:0;background:rgba(5,7,10,.85);backdrop-filter:blur(4px);z-index:300;align-items:center;justify-content:center;padding:24px">
+  <div style="background:var(--panel);border:1px solid var(--line2);border-radius:12px;padding:28px 28px 24px;max-width:400px;width:100%;position:relative">
+    <button onclick="closeEditAuthModal()" style="position:absolute;top:12px;right:12px;background:var(--panel2);border:1px solid var(--line2);color:var(--txt2);width:28px;height:28px;border-radius:6px;cursor:pointer;font-size:16px;line-height:1">x</button>
+    <div style="font-family:'Oswald',sans-serif;font-weight:600;font-size:16px;text-transform:uppercase;letter-spacing:1px;color:var(--txt);margin-bottom:6px">Acceso de Administrador</div>
+    <div style="font-size:14px;color:var(--txt2);margin-bottom:20px">Ingresa tu Discord ID para editar las preguntas.</div>
+    <label style="display:block;font-family:'Oswald',sans-serif;font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--txt2);margin-bottom:7px">Discord ID</label>
+    <input id="editAuthInput" type="text" inputmode="numeric" placeholder="Ej: 696160444083077121" autocomplete="off"
+      onkeydown="if(event.key==='Enter')submitEditAuth();if(event.key==='Escape')closeEditAuthModal();"
+      style="width:100%;background:var(--bg);border:1px solid var(--line2);color:var(--txt);font-family:'JetBrains Mono',monospace;font-size:16px;padding:11px 14px;border-radius:7px;outline:none;margin-bottom:12px">
+    <div id="editAuthErr" style="display:none;color:var(--red);font-family:'JetBrains Mono',monospace;font-size:13px;margin-bottom:12px"></div>
+    <button id="editAuthConfirm" onclick="submitEditAuth()"
+      style="width:100%;background:linear-gradient(180deg,var(--blue),var(--blue-d));color:#fff;border:none;border-radius:7px;padding:12px;font-family:'Oswald',sans-serif;font-weight:600;font-size:14px;text-transform:uppercase;letter-spacing:1.5px;cursor:pointer">Confirmar</button>
+  </div>
+</div>
 </body>
 </html>
