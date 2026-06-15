@@ -161,7 +161,15 @@ footer{text-align:center;color:var(--txt3);font-size:11px;font-family:'JetBrains
 <!-- DASHBOARD -->
 <div id="dashboard" class="hidden">
 
-  <div class="week-nav">
+  <!-- Tabs -->
+<div style="display:flex;gap:8px;margin-bottom:24px">
+  <button id="tabPFA" onclick="switchTab('pfa')" style="font-family:'Oswald',sans-serif;font-size:13px;text-transform:uppercase;letter-spacing:1px;padding:9px 20px;border-radius:7px;cursor:pointer;border:1px solid var(--blue);background:var(--blue-d);color:#fff;transition:all .15s">Exámenes PFA</button>
+  <button id="tabHigh" onclick="switchTab('high')" style="font-family:'Oswald',sans-serif;font-size:13px;text-transform:uppercase;letter-spacing:1px;padding:9px 20px;border-radius:7px;cursor:pointer;border:1px solid var(--line2);background:transparent;color:var(--txt2);transition:all .15s">Exámenes High PFA</button>
+</div>
+
+<!-- PFA Section -->
+<div id="sectionPFA">
+<div class="week-nav">
     <button class="nav-btn" onclick="changeWeek(-1)">◂ Semana ant.</button>
     <div class="week-label" id="weekLabel">—</div>
     <button class="nav-btn" onclick="changeWeek(1)">Semana sig. ▸</button>
@@ -190,7 +198,42 @@ footer{text-align:center;color:var(--txt3);font-size:11px;font-family:'JetBrains
     <div class="loading">Cargando...</div>
   </div>
 
-  <footer>KILOMBO RP · PANEL ADMIN PFA</footer>
+  </div><!-- /sectionPFA -->
+
+<!-- High PFA Section -->
+<div id="sectionHigh" style="display:none">
+  <div style="display:flex;gap:10px;margin-bottom:20px;align-items:center">
+    <button onclick="loadHighExams('pendiente')" id="btnPendientes" style="font-family:'Oswald',sans-serif;font-size:13px;text-transform:uppercase;letter-spacing:1px;padding:8px 18px;border-radius:7px;cursor:pointer;border:1px solid var(--gold);background:var(--amber-d);color:var(--gold)">⏳ Pendientes</button>
+    <button onclick="loadHighExams('corregido')" id="btnCorregidos" style="font-family:'Oswald',sans-serif;font-size:13px;text-transform:uppercase;letter-spacing:1px;padding:8px 18px;border-radius:7px;cursor:pointer;border:1px solid var(--line2);background:transparent;color:var(--txt2)">✓ Corregidos</button>
+  </div>
+  <div id="highList"><div class="loading">Cargando...</div></div>
+</div>
+
+<!-- Modal corrección High -->
+<div class="modal-bg" id="highModal">
+  <div class="modal" style="max-width:860px">
+    <button class="modal-close" onclick="closeHighModal()">×</button>
+    <div id="highModalHead"></div>
+    <div id="highModalBody" style="overflow-y:auto;max-height:55vh;margin:16px 0"></div>
+    <div id="highCalifForm" style="border-top:1px solid var(--line);padding-top:16px;display:none">
+      <div style="font-family:'Oswald',sans-serif;font-size:13px;text-transform:uppercase;letter-spacing:1px;color:var(--txt2);margin-bottom:10px">Calificar examen</div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end">
+        <div>
+          <label style="display:block;font-family:'Oswald',sans-serif;font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--txt3);margin-bottom:6px">Nota (0-10)</label>
+          <input id="highNota" type="number" min="0" max="10" step="0.5" placeholder="8.5" style="width:90px;background:var(--bg);border:1px solid var(--line2);color:var(--txt);font-family:'JetBrains Mono',monospace;font-size:18px;padding:10px 12px;border-radius:7px;text-align:center">
+        </div>
+        <div style="flex:1;min-width:200px">
+          <label style="display:block;font-family:'Oswald',sans-serif;font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--txt3);margin-bottom:6px">Comentario (opcional)</label>
+          <input id="highComentario" type="text" placeholder="Observaciones para el aspirante..." style="width:100%;background:var(--bg);border:1px solid var(--line2);color:var(--txt);font-family:'Roboto Condensed',sans-serif;font-size:15px;padding:10px 12px;border-radius:7px">
+        </div>
+        <button onclick="calificarHigh()" style="background:linear-gradient(180deg,var(--gold),var(--amber-d));color:#000;font-family:'Oswald',sans-serif;font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:1px;border:none;border-radius:7px;padding:12px 22px;cursor:pointer">Guardar nota →</button>
+      </div>
+      <div id="califErr" style="color:var(--red);font-family:'JetBrains Mono',monospace;font-size:13px;margin-top:8px;display:none"></div>
+    </div>
+  </div>
+</div>
+
+<footer>KILOMBO RP · PANEL ADMIN PFA</footer>
 </div>
 
 </div><!-- /wrap -->
@@ -484,6 +527,111 @@ async function doSearch(q){
     resultsDiv.innerHTML='<div class="empty-state">Error de conexión</div>';
   }
 }
+
+/* ============ HIGH PFA ============ */
+let currentHighId = null;
+let currentHighTab = 'pendiente';
+
+function switchTab(tab){
+  if(tab==='pfa'){
+    document.getElementById('sectionPFA').style.display='';
+    document.getElementById('sectionHigh').style.display='none';
+    document.getElementById('tabPFA').style.cssText+='background:var(--blue-d);border-color:var(--blue);color:#fff';
+    document.getElementById('tabHigh').style.cssText+='background:transparent;border-color:var(--line2);color:var(--txt2)';
+  }else{
+    document.getElementById('sectionPFA').style.display='none';
+    document.getElementById('sectionHigh').style.display='';
+    document.getElementById('tabHigh').style.cssText+='background:var(--amber-d);border-color:var(--gold);color:var(--gold)';
+    document.getElementById('tabPFA').style.cssText+='background:transparent;border-color:var(--line2);color:var(--txt2)';
+    loadHighExams(currentHighTab);
+  }
+}
+
+async function loadHighExams(estado){
+  currentHighTab=estado;
+  document.getElementById('highList').innerHTML='<div class="loading">Cargando...</div>';
+  try{
+    const r=await fetch(BACKEND_URL+'/api/admin/high/list?estado='+estado,{headers:{'X-Admin-Id':adminDiscordId}});
+    if(!r.ok){document.getElementById('highList').innerHTML='<div class="empty-state">Error</div>';return;}
+    const data=await r.json();
+    if(!data.length){document.getElementById('highList').innerHTML='<div class="empty-state">Sin examenes '+estado+'</div>';return;}
+    let html='<div class="inst-card">';
+    data.forEach(e=>{
+      const notaStr=e.nota!==null&&e.nota!==undefined?Number(e.nota).toFixed(1)+'/10':'—';
+      const cls=e.estado==='corregido'?(Number(e.nota)>=7?'a':'d'):'';
+      html+=`<div class="exam-row" onclick="verHighExamen(${e.id})">
+        <div class="exam-badge ${cls}" style="${!cls?'background:var(--amber-d);border-color:var(--amber);color:var(--amber)':''}">${e.estado==='pendiente'?'⏳':Number(e.nota)>=7?'✓':'✕'}</div>
+        <div class="exam-info">
+          <div class="exam-nombre">${esc(e.nombre_ic||'Sin nombre')} <span style="font-size:12px;color:var(--gold);font-family:'JetBrains Mono',monospace">EXAMEN ${esc(e.examen||'A')}</span></div>
+          <div class="exam-meta">ID: ${esc(e.discord_id)} · Rango: ${esc(e.rango||'—')} · ${fmtDatetime(e.created_at)}</div>
+        </div>
+        <div class="exam-nota ${cls}" style="${!cls?'color:var(--amber)':''}">${notaStr}</div>
+        <button class="ver-btn" onclick="event.stopPropagation();verHighExamen(${e.id})">Ver</button>
+      </div>`;
+    });
+    html+='</div>';
+    document.getElementById('highList').innerHTML=html;
+  }catch(e){document.getElementById('highList').innerHTML='<div class="empty-state">Error de conexion</div>';}
+}
+
+async function verHighExamen(id){
+  currentHighId=id;
+  document.getElementById('highModal').classList.add('show');
+  document.getElementById('highModalHead').innerHTML='<div class="loading">Cargando...</div>';
+  document.getElementById('highModalBody').innerHTML='';
+  document.getElementById('highCalifForm').style.display='none';
+  try{
+    const r=await fetch(`${BACKEND_URL}/api/admin/high/examen/${id}`,{headers:{'X-Admin-Id':adminDiscordId}});
+    if(!r.ok)throw new Error(r.status);
+    const e=await r.json();
+    const notaStr=e.nota!==null&&e.nota!==undefined?Number(e.nota).toFixed(1)+'/10':'Sin corregir';
+    document.getElementById('highModalHead').innerHTML=`
+      <div class="modal-title">Examen ${esc(e.examen||'A')} — ${esc(e.nombre_ic||'—')}</div>
+      <div class="modal-meta">
+        <span>Discord ID: <b>${esc(e.discord_id)}</b></span>
+        <span>Rango: <b>${esc(e.rango||'—')}</b></span>
+        <span>Enviado: <b>${fmtDatetime(e.created_at)}</b></span>
+        <span>Nota: <b>${notaStr}</b></span>
+        ${e.corrector?'<span>Corrector: <b>'+esc(e.corrector)+'</b></span>':''}
+      </div>`;
+    const resp=e.respuestas||[];
+    let bh='';
+    resp.forEach((rr,i)=>{
+      bh+=`<div style="margin-bottom:14px;background:var(--panel2);border-radius:8px;padding:14px;border:1px solid var(--line)">
+        <div style="font-family:'Oswald',sans-serif;font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--gold);margin-bottom:6px">Pregunta ${i+1}</div>
+        <div style="font-weight:700;font-size:15px;margin-bottom:8px">${esc(rr.pregunta||'')}</div>
+        <div style="font-size:14px;color:var(--txt2);line-height:1.6;background:var(--bg);border:1px solid var(--line);border-radius:5px;padding:10px;white-space:pre-wrap">${esc(rr.respuesta||'Sin respuesta')}</div>
+      </div>`;
+    });
+    document.getElementById('highModalBody').innerHTML=bh;
+    if(e.estado==='pendiente'){
+      document.getElementById('highCalifForm').style.display='';
+      document.getElementById('highNota').value='';
+      document.getElementById('highComentario').value='';
+      document.getElementById('califErr').style.display='none';
+    }
+  }catch(err){document.getElementById('highModalHead').innerHTML='<div style="color:var(--red)">Error cargando</div>';}
+}
+
+async function calificarHigh(){
+  const nota=document.getElementById('highNota').value;
+  const comentario=document.getElementById('highComentario').value;
+  const err=document.getElementById('califErr');
+  if(!nota||isNaN(Number(nota))||Number(nota)<0||Number(nota)>10){err.textContent='Nota invalida (0-10).';err.style.display='block';return;}
+  err.style.display='none';
+  try{
+    const r=await fetch(`${BACKEND_URL}/api/admin/high/calificar/${currentHighId}`,{
+      method:'PATCH',headers:{'Content-Type':'application/json','X-Admin-Id':adminDiscordId},
+      body:JSON.stringify({nota:Number(nota),comentario})
+    });
+    if(!r.ok)throw new Error(r.status);
+    closeHighModal();
+    loadHighExams(currentHighTab);
+  }catch(e){err.textContent='Error al guardar.';err.style.display='block';}
+}
+
+function closeHighModal(){document.getElementById('highModal').classList.remove('show');}
+document.getElementById('highModal').addEventListener('click',e=>{if(e.target===document.getElementById('highModal'))closeHighModal();});
 
 /* ============ INIT ============ */
 // Si ya hay sesión guardada, intentar auto-login
