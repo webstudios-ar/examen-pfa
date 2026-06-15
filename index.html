@@ -424,38 +424,8 @@
 
 <script>
 /* ============ DEFAULT EXAM DATA ============ */
-const DEFAULT_DATA = {
-  part1: [
-    {q:"¿Qué es IC?", a:"Es todo lo que ocurre dentro del entorno de nuestro personaje.", w:1},
-    {q:"¿Qué es OOC?", a:"Todo lo que ocurre fuera del juego.", w:1},
-    {q:"¿Para qué se utilizan el <c>/me</c> y el <c>/do</c>? (2 ejemplos de cada uno)", a:"El <c>/me</c> describe acciones físicas, gestos o sentimientos del personaje que no están animados en el juego. El <c>/do</c> es un comando narrativo para describir el entorno, cosas que no se ven a simple vista o preguntar por el estado de algo/alguien.", w:2},
-    {q:"¿Qué es MG? (1 ejemplo)", a:"Usar información OOC dentro del juego para beneficio IC. Ejemplo: escuchar en Discord la ubicación de alguien y buscarlo IC.", w:1},
-    {q:"¿Qué es DM? (1 ejemplo)", a:"Hacer daño o matar a alguien sin motivo ni rol previo. Ejemplo: disparar sin interacción previa.", w:1},
-    {q:"¿Qué es PG? (1 ejemplo)", a:"Realizar acciones imposibles o sin lógica en la vida real. Ejemplo: tirarse de un edificio y seguir corriendo como si nada.", w:2},
-    {q:"¿Qué es VDM?", a:"Utilizar un vehículo como arma.", w:1},
-    {q:"¿Qué es RK?", a:"Regresar al lugar donde habías sido abatido para vengarte de quien te asesinó, sin respetar el PK.", w:2},
-    {q:"¿Qué es evadir rol?", a:"Abandonar un rol desconectándose, usando menú, guardando el vehículo en persecución o entrando a una propiedad para cortarlo.", w:2},
-    {q:"¿Qué es RDE?", a:"Rol de entorno: todo lo que nos envuelve. La ciudad está viva, hay gente en las calles y vecinos que miran por las ventanas (además de los NPC). Ej: en comisaría habría muchos policías además de los presentes en rol.", w:2},
-    {q:"¿Se puede mentir en el <c>/do</c>?", a:"No, no se puede mentir en el <c>/do</c>.", w:1},
-    {q:"¿Qué es el PK?", a:"Pérdida de memoria del personaje al ser abatido: se olvida de todo lo ocurrido en el trayecto previo del rol que lleva a su muerte.", w:1},
-    {q:"¿Qué es el PKT?", a:"Al abandonar una organización se pierde la memoria de la información interna, pero se recuerda haber pertenecido.", w:2},
-    {q:"¿Qué es el CK?", a:"Muerte total del personaje: se pierden todas las posesiones y bienes IC, y no se recuerda nada del personaje anterior.", w:2},
-    {q:"¿Qué es Fair Play?", a:"Juego justo: todo rol, agresivo o pasivo, debe desarrollarse respetando las normas básicas del rol, del servidor y de los propios usuarios involucrados, sean compañeros o adversarios.", w:2}
-  ],
-  part2: [
-    {q:"¿Qué es el H50?", a:"Es el encargado de asignar a los policías disponibles a los distintos robos.", w:2},
-    {q:"¿Cuáles son los derechos de un civil? ¿Cuándo deben leerse?", a:"Derecho a guardar silencio (todo lo que diga podrá y será usado en su contra), a comida y bebida si lo requiere, a atención médica si la precisa, y a una llamada de no más de 5 minutos en presencia de un oficial. Todos sus derechos se cumplen en comisaría. Se leen ANTES de ingresar a comisaría.", w:3},
-    {q:"¿Qué significan los códigos radiales <c>10-04</c>, <c>10-05</c> y <c>10-32</c>?", a:"<c>10-04</c>: Afirmativo · <c>10-05</c>: Negativo · <c>10-32</c>: Se necesita apoyo.", w:1},
-    {q:"¿Cómo negociarías con un atracador?", a:"Preguntar cuánto son, si hay rehenes o tiradores, e informar la cantidad de oficiales presentes.", w:2},
-    {q:"¿Cuál es el monto máximo que podés ofrecer por un compañero con rango Cadete?", a:"4.000.000 (cuatro millones).", w:1}
-  ],
-  part3: [
-    {q:"¿Cómo reaccionarías ante una orden de un alto mando?", a:"Evaluar el criterio del aspirante: acatar la orden, respetar la cadena de mando y la jerarquía.", w:3},
-    {q:"¿Cómo reaccionarías si te intentan secuestrar siendo un grupo más numeroso que el tuyo?", a:"Evaluar criterio: priorizar la integridad, no hacerse el héroe, valorar la situación de inferioridad numérica.", w:3},
-    {q:"¿Cómo reaccionarías si ves que están agrediendo a un civil?", a:"Evaluar criterio: intervención correcta, protección del civil, uso proporcional de la fuerza.", w:3},
-    {q:"¿Cómo reaccionarías si ves que le están apuntando a un compañero?", a:"Evaluar criterio: respuesta táctica adecuada, no exponer de más, dar voz de alto / cubrir al compañero.", w:3}
-  ]
-};
+const DEFAULT_DATA = null; // Las preguntas se cargan desde el servidor
+
 
 /* ============ STORAGE KEYS ============ */
 const LS_QUESTIONS = 'pfa_exam_questions_v1';
@@ -527,13 +497,22 @@ async function saveExamRecord(aprobado, nota){
 }
 
 /* ============ DATA LOADING ============ */
-let DATA = loadData();
-function loadData(){
+let DATA = null; // se carga asincrónicamente desde el servidor
+async function loadData(){
+  // Intentar localStorage primero
   const saved = lsGet(LS_QUESTIONS);
   if(saved){
-    try{ const p = JSON.parse(saved); if(p.part1&&p.part2&&p.part3) return p; }catch(e){}
+    try{
+      const p = JSON.parse(saved);
+      if(p.part1 && p.part2 && p.part3) return p;
+    }catch(e){}
   }
-  return JSON.parse(JSON.stringify(DEFAULT_DATA));
+  // Cargar desde el servidor
+  const r = await fetch(BACKEND_URL + '/api/questions');
+  if(!r.ok) throw new Error('No se pudo cargar las preguntas');
+  const data = await r.json();
+  lsSet(LS_QUESTIONS, JSON.stringify(data));
+  return data;
 }
 
 /* ============ STATE ============ */
@@ -1393,6 +1372,17 @@ window.addEventListener('beforeunload', (e)=>{
 });
 
 /* ============ INIT ============ */
+// Cargar preguntas del servidor al iniciar
+(async function initApp(){
+  try{
+    DATA = await loadData();
+    document.getElementById('loadingScreen').style.display = 'none';
+    document.getElementById('setupScreen').style.display = '';
+    checkSavedProgress();
+  }catch(e){
+    document.getElementById('loadingScreen').innerHTML = '<div style="color:var(--red);font-family:\'JetBrains Mono\',monospace;font-size:14px">Error al conectar con el servidor.<br>Verificá tu conexión y recargá la página.</div>';
+  }
+})();
 buildFlat();
 checkResume();
 </script>
