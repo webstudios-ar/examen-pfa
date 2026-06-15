@@ -489,6 +489,21 @@ async function checkDiscordStatus(discordId){
 /* Inserta el registro del examen al terminar (vía backend) */
 async function saveExamRecord(aprobado, nota){
   try{
+    // Armar detalle de respuestas con pregunta + marca para el panel de admin
+    const respuestasDetalle = {};
+    Object.keys(state).forEach(i=>{
+      const idx=parseInt(i);
+      if(allQ[idx]){
+        respuestasDetalle[i]={
+          q: allQ[idx].q.replace(/<c>/g,'').replace(/<\/c>/g,''),
+          a: allQ[idx].a.replace(/<c>/g,'').replace(/<\/c>/g,''),
+          w: weights[idx],
+          parte: metas[idx]?metas[idx].part:0,
+          isEval: metas[idx]?metas[idx].isEval:false,
+          mark: state[i]
+        };
+      }
+    });
     const r = await fetch(BACKEND_URL + '/api/save', {
       method:'POST',
       headers:{'Content-Type':'application/json'},
@@ -497,7 +512,8 @@ async function saveExamRecord(aprobado, nota){
         nombre: sessionMeta.name || '',
         instructor: sessionMeta.inst || '',
         nota: Number(nota.toFixed(2)),
-        aprobado: !!aprobado
+        aprobado: !!aprobado,
+        respuestas: respuestasDetalle
       })
     });
     return r.ok;

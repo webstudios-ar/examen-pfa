@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Panel Admin PFA · Kilombo RP</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Roboto+Condensed:wght@400;700&family=JetBrains+Mono:wght@400;700&display=swap');
+:root{
+  --bg:#0a0d12;--bg2:#0f141b;--panel:#141b24;--panel2:#1a232e;
+  --line:#26303d;--line2:#33414f;
+  --blue:#2d7dd2;--blue-d:#1c5fa8;--gold:#e8b339;
+  --green:#3fb950;--green-d:#1f5a2a;
+  --amber:#d99a2b;--amber-d:#6b4d15;
+  --red:#e5484d;--red-d:#6b2025;
+  --txt:#e6edf3;--txt2:#9aa7b4;--txt3:#5e6b78;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Roboto Condensed',sans-serif;background:var(--bg);color:var(--txt);line-height:1.5;min-height:100vh}
+.wrap{max-width:1100px;margin:0 auto;padding:0 16px 80px}
+
+/* HEADER */
+header{border-bottom:2px solid var(--line);padding:24px 0 18px;margin-bottom:28px;position:relative}
+header::after{content:"";position:absolute;bottom:-2px;left:0;width:130px;height:2px;background:var(--blue)}
+.badge-row{display:flex;align-items:center;gap:14px}
+.shield{width:42px;height:50px;flex-shrink:0;background:linear-gradient(180deg,var(--blue),var(--blue-d));clip-path:polygon(50% 0,100% 18%,100% 62%,50% 100%,0 62%,0 18%);display:flex;align-items:center;justify-content:center}
+.shield span{font-family:'Oswald',sans-serif;font-weight:700;font-size:16px;color:#fff;letter-spacing:1px;margin-top:-4px}
+h1{font-family:'Oswald',sans-serif;font-weight:600;font-size:clamp(20px,4vw,28px);text-transform:uppercase;letter-spacing:.5px}
+.sub{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--blue);letter-spacing:2px;text-transform:uppercase;margin-top:2px}
+
+/* LOGIN */
+.login-box{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:36px;max-width:460px;margin:60px auto}
+.login-box h2{font-family:'Oswald',sans-serif;font-weight:500;font-size:20px;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.login-box p{color:var(--txt2);font-size:15px;margin-bottom:24px}
+.field label{display:block;font-family:'Oswald',sans-serif;font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--txt2);margin-bottom:7px}
+.field input{width:100%;background:var(--bg);border:1px solid var(--line2);color:var(--txt);font-family:'JetBrains Mono',monospace;font-size:16px;padding:11px 14px;border-radius:7px}
+.field input:focus{outline:none;border-color:var(--blue)}
+.field{margin-bottom:18px}
+.btn{font-family:'Oswald',sans-serif;font-weight:600;font-size:14px;text-transform:uppercase;letter-spacing:1.5px;cursor:pointer;border:none;border-radius:7px;padding:12px 24px;transition:all .15s}
+.btn-primary{background:linear-gradient(180deg,var(--blue),var(--blue-d));color:#fff;width:100%;margin-top:4px}
+.btn-primary:hover{filter:brightness(1.1)}
+.err-msg{color:var(--red);font-size:14px;margin-top:10px;font-family:'JetBrains Mono',monospace;display:none}
+.err-msg.show{display:block}
+
+/* DASHBOARD */
+.hidden{display:none}
+.week-nav{display:flex;align-items:center;gap:14px;margin-bottom:24px;flex-wrap:wrap}
+.week-label{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:16px;background:var(--panel2);border:1px solid var(--line2);padding:8px 18px;border-radius:7px;flex:1;text-align:center;min-width:220px}
+.nav-btn{background:var(--panel2);border:1px solid var(--line2);color:var(--txt2);font-family:'Oswald',sans-serif;font-size:14px;text-transform:uppercase;letter-spacing:1px;padding:9px 18px;border-radius:7px;cursor:pointer;transition:all .15s}
+.nav-btn:hover{border-color:var(--blue);color:var(--blue)}
+.who{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--txt3);margin-left:auto}
+
+/* STAT CARDS */
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:28px}
+@media(max-width:600px){.stat-grid{grid-template-columns:repeat(2,1fr)}}
+.stat-card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:18px 14px;text-align:center}
+.stat-card .num{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:32px;line-height:1}
+.stat-card .lbl{font-family:'Oswald',sans-serif;font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--txt3);margin-top:6px}
+.stat-card.total .num{color:var(--blue)}
+.stat-card.aprob .num{color:var(--green)}
+.stat-card.desap .num{color:var(--red)}
+.stat-card.inst .num{color:var(--amber)}
+
+/* INSTRUCTOR CARDS */
+.inst-section{margin-bottom:10px}
+.inst-card{background:var(--panel);border:1px solid var(--line);border-radius:9px;overflow:hidden;margin-bottom:12px}
+.inst-head{display:flex;align-items:center;gap:14px;padding:16px 20px;cursor:pointer;transition:background .15s}
+.inst-head:hover{background:var(--panel2)}
+.inst-name{font-family:'Oswald',sans-serif;font-weight:600;font-size:17px;text-transform:uppercase;letter-spacing:.5px;flex:1}
+.inst-pills{display:flex;gap:8px;flex-shrink:0}
+.pill{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;padding:4px 10px;border-radius:5px}
+.pill.t{background:var(--panel2);border:1px solid var(--line2);color:var(--txt2)}
+.pill.a{background:var(--green-d);color:var(--green)}
+.pill.d{background:var(--red-d);color:var(--red)}
+.inst-arrow{color:var(--txt3);font-size:18px;transition:transform .2s;flex-shrink:0}
+.inst-arrow.open{transform:rotate(90deg)}
+.inst-body{display:none;border-top:1px solid var(--line)}
+.inst-body.open{display:block}
+.exam-row{display:flex;align-items:center;gap:12px;padding:11px 20px;border-bottom:1px solid var(--line);cursor:pointer;transition:background .15s}
+.exam-row:last-child{border-bottom:none}
+.exam-row:hover{background:var(--panel2)}
+.exam-badge{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.exam-badge.a{background:var(--green-d);border:1px solid var(--green)}
+.exam-badge.d{background:var(--red-d);border:1px solid var(--red)}
+.exam-info{flex:1}
+.exam-nombre{font-size:16px;font-weight:700}
+.exam-meta{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--txt3);margin-top:2px}
+.exam-nota{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:16px}
+.exam-nota.a{color:var(--green)}
+.exam-nota.d{color:var(--red)}
+.ver-btn{font-family:'Oswald',sans-serif;font-size:12px;text-transform:uppercase;letter-spacing:.5px;color:var(--blue);cursor:pointer;padding:5px 10px;border:1px solid var(--blue-d);border-radius:5px;background:transparent;transition:all .15s;white-space:nowrap}
+.ver-btn:hover{background:var(--blue-d)}
+
+.empty-state{text-align:center;padding:48px 20px;color:var(--txt3);font-family:'Oswald',sans-serif;font-size:16px;letter-spacing:.5px}
+.loading{text-align:center;padding:40px;color:var(--txt2);font-family:'JetBrains Mono',monospace;font-size:14px}
+
+/* MODAL DETALLE */
+.modal-bg{position:fixed;inset:0;background:rgba(5,7,10,.85);backdrop-filter:blur(4px);z-index:200;display:none;align-items:flex-start;justify-content:center;padding:30px 16px;overflow-y:auto}
+.modal-bg.show{display:flex}
+.modal{background:var(--panel);border:1px solid var(--line2);border-radius:12px;max-width:800px;width:100%;position:relative}
+.modal-head{padding:22px 24px 16px;border-bottom:1px solid var(--line)}
+.modal-close{position:absolute;top:16px;right:16px;background:var(--panel2);border:1px solid var(--line2);color:var(--txt2);width:30px;height:30px;border-radius:6px;cursor:pointer;font-size:18px;line-height:1;transition:all .15s}
+.modal-close:hover{border-color:var(--red);color:var(--red)}
+.modal-title{font-family:'Oswald',sans-serif;font-weight:600;font-size:19px;text-transform:uppercase;letter-spacing:.5px}
+.modal-meta{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--txt3);margin-top:6px;display:flex;flex-wrap:wrap;gap:16px}
+.modal-meta span b{color:var(--txt2)}
+.modal-nota{display:inline-flex;align-items:center;gap:10px;margin-top:12px;padding:10px 16px;border-radius:8px;border:1px solid var(--line2);background:var(--bg)}
+.modal-nota .nn{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:28px}
+.modal-nota.a .nn{color:var(--green)}
+.modal-nota.d .nn{color:var(--red)}
+.modal-nota .verdict{font-family:'Oswald',sans-serif;font-size:14px;text-transform:uppercase;letter-spacing:1px}
+.modal-nota.a .verdict{color:var(--green)}
+.modal-nota.d .verdict{color:var(--red)}
+.modal-body{padding:20px 24px;max-height:60vh;overflow-y:auto}
+.part-label{font-family:'Oswald',sans-serif;font-size:12px;text-transform:uppercase;letter-spacing:2px;color:var(--blue);margin:18px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+.resp-row{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
+.resp-row:last-child{border-bottom:none}
+.resp-mark{flex-shrink:0;width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;margin-top:2px}
+.resp-mark.bien{background:var(--green-d);color:var(--green)}
+.resp-mark.medio,.resp-mark.reg{background:var(--amber-d);color:var(--amber)}
+.resp-mark.mal{background:var(--red-d);color:var(--red)}
+.resp-content{flex:1}
+.resp-q{font-size:15px;font-weight:700;line-height:1.35;margin-bottom:5px}
+.resp-a{font-size:13.5px;color:var(--txt2);line-height:1.5;font-style:italic}
+.resp-a-label{font-family:'Oswald',sans-serif;font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--gold);margin-bottom:3px}
+.w-chip{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;margin-left:6px;text-transform:uppercase;vertical-align:middle}
+.w1{background:rgba(63,185,80,.12);color:var(--green);border:1px solid var(--green-d)}
+.w2{background:rgba(217,154,43,.12);color:var(--amber);border:1px solid var(--amber-d)}
+.w3{background:rgba(229,72,77,.14);color:var(--red);border:1px solid var(--red-d)}
+
+footer{text-align:center;color:var(--txt3);font-size:11px;font-family:'JetBrains Mono',monospace;letter-spacing:1px;margin-top:40px;padding-top:16px;border-top:1px solid var(--line)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="badge-row">
+    <div class="shield"><span>PFA</span></div>
+    <div>
+      <h1>Panel de Administración PFA</h1>
+      <div class="sub">Kilombo Roleplay · Registro de Exámenes</div>
+    </div>
+  </div>
+</header>
+
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div class="login-box">
+    <h2>Acceso de Administrador</h2>
+    <p>Ingresá tu Discord ID para ver los registros de exámenes.</p>
+    <div class="field">
+      <label>Tu Discord ID</label>
+      <input type="text" id="adminId" placeholder="Ej: 696160444083077121" inputmode="numeric" autocomplete="off">
+    </div>
+    <button class="btn btn-primary" onclick="login()">Entrar al panel</button>
+    <div class="err-msg" id="loginErr">No tenés acceso. Verificá tu Discord ID.</div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard" class="hidden">
+
+  <div class="week-nav">
+    <button class="nav-btn" onclick="changeWeek(-1)">◂ Semana ant.</button>
+    <div class="week-label" id="weekLabel">—</div>
+    <button class="nav-btn" onclick="changeWeek(1)">Semana sig. ▸</button>
+    <span class="who" id="whoLabel"></span>
+  </div>
+
+  <div class="stat-grid">
+    <div class="stat-card total"><div class="num" id="statTotal">—</div><div class="lbl">Exámenes</div></div>
+    <div class="stat-card aprob"><div class="num" id="statAprob">—</div><div class="lbl">Aprobados</div></div>
+    <div class="stat-card desap"><div class="num" id="statDesap">—</div><div class="lbl">Desaprobados</div></div>
+    <div class="stat-card inst"><div class="num" id="statInst">—</div><div class="lbl">Instructores</div></div>
+  </div>
+
+  <div id="instSection" class="inst-section">
+    <div class="loading">Cargando...</div>
+  </div>
+
+  <footer>KILOMBO RP · PANEL ADMIN PFA</footer>
+</div>
+
+</div><!-- /wrap -->
+
+<!-- MODAL DETALLE DE EXAMEN -->
+<div class="modal-bg" id="examModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">×</button>
+    <div class="modal-head" id="modalHead"></div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<script>
+const BACKEND_URL = 'https://examen-pfa-backend-production.up.railway.app';
+
+let adminDiscordId = sessionStorage.getItem('pfa_admin_id') || '';
+let currentWeekDate = new Date(); // fecha referencia para la semana actual
+
+/* ============ LOGIN ============ */
+async function login() {
+  const id = document.getElementById('adminId').value.trim();
+  if (!id) return;
+  const btn = document.querySelector('.btn-primary');
+  const orig = btn.innerHTML;
+  btn.innerHTML = '⏳ Verificando...';
+  btn.disabled = true;
+
+  try {
+    const r = await fetch(BACKEND_URL + '/api/admin/stats?week=' + fmtDateParam(new Date()), {
+      headers: { 'X-Admin-Id': id }
+    });
+    if (r.status === 403) {
+      document.getElementById('loginErr').classList.add('show');
+      btn.innerHTML = orig;
+      btn.disabled = false;
+      return;
+    }
+    adminDiscordId = id;
+    sessionStorage.setItem('pfa_admin_id', id);
+    showDashboard(await r.json());
+  } catch(e) {
+    document.getElementById('loginErr').textContent = 'Error de conexión. Intentá de nuevo.';
+    document.getElementById('loginErr').classList.add('show');
+    btn.innerHTML = orig;
+    btn.disabled = false;
+  }
+}
+
+/* ============ DASHBOARD ============ */
+async function showDashboard(data) {
+  document.getElementById('loginScreen').classList.add('hidden');
+  document.getElementById('dashboard').classList.remove('hidden');
+  document.getElementById('whoLabel').textContent = 'ID: ' + adminDiscordId;
+  renderWeekData(data);
+}
+
+async function loadWeek(date) {
+  document.getElementById('instSection').innerHTML = '<div class="loading">Cargando...</div>';
+  try {
+    const r = await fetch(BACKEND_URL + '/api/admin/stats?week=' + fmtDateParam(date), {
+      headers: { 'X-Admin-Id': adminDiscordId }
+    });
+    if (!r.ok) throw new Error(r.status);
+    renderWeekData(await r.json());
+  } catch(e) {
+    document.getElementById('instSection').innerHTML = '<div class="empty-state">Error cargando datos</div>';
+  }
+}
+
+function renderWeekData(data) {
+  // Labels de la semana
+  const start = new Date(data.week_start);
+  const end   = new Date(data.week_end);
+  document.getElementById('weekLabel').textContent =
+    'Sáb ' + fmtDate(start) + ' — Vie ' + fmtDate(end);
+
+  // Stat cards
+  document.getElementById('statTotal').textContent = data.total;
+  document.getElementById('statAprob').textContent = data.aprobados;
+  document.getElementById('statDesap').textContent = data.desaprobados;
+  document.getElementById('statInst').textContent  = data.instructores.length;
+
+  // Instructores
+  const sec = document.getElementById('instSection');
+  if (!data.instructores.length) {
+    sec.innerHTML = '<div class="empty-state">Sin exámenes esta semana</div>';
+    return;
+  }
+  sec.innerHTML = '';
+  data.instructores.forEach((inst, i) => {
+    const pct = inst.total ? Math.round(inst.aprobados/inst.total*100) : 0;
+    const card = document.createElement('div');
+    card.className = 'inst-card';
+    card.innerHTML = `
+      <div class="inst-head" onclick="toggleInst(${i})">
+        <div class="inst-name">${esc(inst.instructor)}</div>
+        <div class="inst-pills">
+          <span class="pill t">${inst.total} exám.</span>
+          <span class="pill a">✓ ${inst.aprobados}</span>
+          <span class="pill d">✕ ${inst.desaprobados}</span>
+          <span class="pill t">${pct}%</span>
+        </div>
+        <span class="inst-arrow" id="arrow-${i}">▶</span>
+      </div>
+      <div class="inst-body" id="body-${i}">
+        ${inst.examenes.map(e => `
+          <div class="exam-row" onclick="verExamen(${e.id})">
+            <div class="exam-badge ${e.aprobado?'a':'d'}">${e.aprobado?'✓':'✕'}</div>
+            <div class="exam-info">
+              <div class="exam-nombre">${esc(e.nombre||'Sin nombre')}</div>
+              <div class="exam-meta">ID: ${esc(e.discord_id)} · ${fmtDatetime(e.created_at)}</div>
+            </div>
+            <div class="exam-nota ${e.aprobado?'a':'d'}">${Number(e.nota).toFixed(1)}</div>
+            <button class="ver-btn" onclick="event.stopPropagation();verExamen(${e.id})">Ver detalle</button>
+          </div>
+        `).join('')}
+      </div>`;
+    sec.appendChild(card);
+  });
+}
+
+function toggleInst(i) {
+  const body  = document.getElementById('body-'+i);
+  const arrow = document.getElementById('arrow-'+i);
+  body.classList.toggle('open');
+  arrow.classList.toggle('open');
+}
+
+/* ============ SEMANA ============ */
+function changeWeek(dir) {
+  currentWeekDate = new Date(currentWeekDate.getTime() + dir * 7 * 24 * 60 * 60 * 1000);
+  loadWeek(currentWeekDate);
+}
+
+/* ============ MODAL DETALLE ============ */
+async function verExamen(id) {
+  document.getElementById('examModal').classList.add('show');
+  document.getElementById('modalHead').innerHTML = '<div class="loading">Cargando detalle...</div>';
+  document.getElementById('modalBody').innerHTML = '';
+
+  try {
+    const r = await fetch(`${BACKEND_URL}/api/admin/examen/${id}`, {
+      headers: { 'X-Admin-Id': adminDiscordId }
+    });
+    if (!r.ok) throw new Error(r.status);
+    const e = await r.json();
+    renderExamenModal(e);
+  } catch(err) {
+    document.getElementById('modalHead').innerHTML = '<div style="color:var(--red)">Error cargando detalle</div>';
+  }
+}
+
+function renderExamenModal(e) {
+  const fecha = fmtDatetime(e.created_at);
+  const notaNum = Number(e.nota).toFixed(1);
+  const cls = e.aprobado ? 'a' : 'd';
+  const verdict = e.aprobado ? 'Aprobado' : 'Desaprobado';
+
+  document.getElementById('modalHead').innerHTML = `
+    <div class="modal-title">${esc(e.nombre||'Sin nombre')}</div>
+    <div class="modal-meta">
+      <span>Discord ID: <b>${esc(e.discord_id)}</b></span>
+      <span>Instructor: <b>${esc(e.instructor||'—')}</b></span>
+      <span>Fecha: <b>${fecha}</b></span>
+    </div>
+    <div class="modal-nota ${cls}">
+      <span class="nn">${notaNum}<span style="font-size:16px;color:var(--txt3)">/10</span></span>
+      <span class="verdict">${verdict}</span>
+    </div>`;
+
+  const body = document.getElementById('modalBody');
+  const resp = e.respuestas;
+
+  if (!resp || !Object.keys(resp).length) {
+    body.innerHTML = '<div class="empty-state" style="padding:24px">Sin detalle de respuestas (examen anterior al sistema)</div>';
+    return;
+  }
+
+  // Agrupar por parte
+  const partes = { 1: [], 2: [], 3: [] };
+  Object.keys(resp).sort((a,b)=>parseInt(a)-parseInt(b)).forEach(k => {
+    const r = resp[k];
+    const p = r.parte || 1;
+    if (!partes[p]) partes[p] = [];
+    partes[p].push({ idx: k, ...r });
+  });
+
+  const partNames = {1:'Parte 1 · Normativa General de Rol', 2:'Parte 2 · Normativa de la PFA', 3:'Parte 3 · Situaciones de criterio'};
+  const wLabels = {1:'Básica',2:'Intermedia',3:'Clave'};
+  const markLabel = {bien:'BIEN',medio:'A MEDIAS',reg:'REGULAR',mal:'MAL'};
+  const markIcon = {bien:'✓',medio:'~',reg:'~',mal:'✕'};
+
+  let html = '';
+  [1,2,3].forEach(p => {
+    if (!partes[p] || !partes[p].length) return;
+    html += `<div class="part-label">${partNames[p]}</div>`;
+    partes[p].forEach((r, i) => {
+      const w = r.w || 1;
+      html += `
+        <div class="resp-row">
+          <div class="resp-mark ${r.mark}">${markIcon[r.mark]||'?'}</div>
+          <div class="resp-content">
+            <div class="resp-q">${i+1}. ${esc(r.q||'')}
+              <span class="w-chip w${w}">${wLabels[w]||''} · ${w}pts</span>
+            </div>
+            <div>
+              <div class="resp-a-label">${r.isEval?'Criterio':'Respuesta correcta'} · Marcó: <b style="color:${r.mark==='bien'?'var(--green)':r.mark==='mal'?'var(--red)':'var(--amber)'}">${markLabel[r.mark]||r.mark}</b></div>
+              <div class="resp-a">${esc(r.a||'')}</div>
+            </div>
+          </div>
+        </div>`;
+    });
+  });
+
+  body.innerHTML = html;
+}
+
+function closeModal() {
+  document.getElementById('examModal').classList.remove('show');
+}
+document.getElementById('examModal').addEventListener('click', e => {
+  if (e.target === document.getElementById('examModal')) closeModal();
+});
+
+/* ============ UTILS ============ */
+function fmtDate(d) {
+  const dd = String(d.getDate()).padStart(2,'0');
+  const mm = String(d.getMonth()+1).padStart(2,'0');
+  return dd+'/'+mm;
+}
+function fmtDatetime(iso) {
+  const d = new Date(iso);
+  // Convertir a Argentina UTC-3
+  const ar = new Date(d.getTime() - 3*60*60*1000);
+  return String(ar.getDate()).padStart(2,'0')+'/'+
+         String(ar.getMonth()+1).padStart(2,'0')+' '+
+         String(ar.getHours()).padStart(2,'0')+':'+
+         String(ar.getMinutes()).padStart(2,'0');
+}
+function fmtDateParam(d) {
+  return d.toISOString().slice(0,10);
+}
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+/* ============ INIT ============ */
+// Si ya hay sesión guardada, intentar auto-login
+if (adminDiscordId) {
+  document.getElementById('adminId').value = adminDiscordId;
+  // Intentar cargar directo
+  (async ()=>{
+    try{
+      const r = await fetch(BACKEND_URL+'/api/admin/stats?week='+fmtDateParam(currentWeekDate),{
+        headers:{'X-Admin-Id':adminDiscordId}
+      });
+      if(r.ok) showDashboard(await r.json());
+    }catch(e){}
+  })();
+}
+
+// Enter en el input
+document.getElementById('adminId').addEventListener('keydown', e => {
+  if(e.key==='Enter') login();
+});
+</script>
+</body>
+</html>
