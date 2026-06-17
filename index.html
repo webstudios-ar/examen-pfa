@@ -480,12 +480,12 @@ const BACKEND_URL = 'https://examen-pfa-backend-production.up.railway.app';
    Si desaprobó hace < 24h -> 'espera'. Sino -> 'libre'. */
 async function checkDiscordStatus(discordId){
   const statusEl = document.getElementById('discordStatus');
-  if(!statusEl) return;
+  if(!statusEl) return { status: 'libre' };
   statusEl.innerHTML = '<span style="color:var(--txt3)">Verificando...</span>';
   statusEl.style.display = 'block';
   try{
     const r = await fetch(BACKEND_URL + '/api/check?discord_id=' + encodeURIComponent(discordId));
-    if(!r.ok){ statusEl.style.display='none'; return; }
+    if(!r.ok){ statusEl.style.display='none'; return { status: 'error', msg: 'Error de red' }; }
     const data = await r.json();
 
     function fmtFecha(iso){
@@ -542,8 +542,10 @@ async function checkDiscordStatus(discordId){
         statusEl.style.display = 'none';
       }
     }
+    return data;
   } catch(e){
     statusEl.style.display = 'none';
+    return { status: 'error', msg: 'Error de conexion' };
   }
 }
 
