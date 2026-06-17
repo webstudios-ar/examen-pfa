@@ -656,6 +656,7 @@ function setMode(m){
 
 /* ============ FLATTEN ============ */
 function buildFlat(){
+  if(!DATA) return;
   allQ = []; weights = []; metas = [];
   DATA.part1.forEach(x=>{allQ.push(x);weights.push(x.w);metas.push({part:1,isEval:false});});
   DATA.part2.forEach(x=>{allQ.push(x);weights.push(x.w);metas.push({part:2,isEval:false});});
@@ -1442,14 +1443,17 @@ window.addEventListener('beforeunload', (e)=>{
 (async function initApp(){
   try{
     DATA = await loadData();
-    document.getElementById('loadingScreen').style.display = 'none';
-    document.getElementById('setupScreen').style.display = '';
+    const ls = document.getElementById('loadingScreen');
+    if(ls) ls.style.display = 'none';
+    const ss = document.getElementById('setupScreen');
+    if(ss) ss.style.display = '';
     checkSavedProgress();
   }catch(e){
-    document.getElementById('loadingScreen').innerHTML = '<div style="color:var(--red);font-family:\'JetBrains Mono\',monospace;font-size:14px">Error al conectar con el servidor.<br>Verificá tu conexión y recargá la página.</div>';
+    const ls = document.getElementById('loadingScreen');
+    if(ls) ls.innerHTML = '<div style="color:var(--red);font-family:\'JetBrains Mono\',monospace;font-size:14px">Error al conectar con el servidor.<br>Recargá la página.</div>';
+    console.error('initApp error:', e);
   }
 })();
-buildFlat();
 checkResume();
 </script>
 
