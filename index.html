@@ -1480,7 +1480,7 @@ window.addEventListener('beforeunload', (e)=>{
     // Si falla usa las preguntas hardcodeadas que ya están en DATA
     console.warn('Usando preguntas locales:', e.message);
   }
-  checkSavedProgress();
+  if(typeof checkResume === "function") checkResume();
 })();
 checkResume();
 </script>
