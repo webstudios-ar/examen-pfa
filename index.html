@@ -357,7 +357,7 @@
         <div class="toggle-opt" id="modePres" onclick="setMode('pres')">Presentación<small>Una pregunta a la vez</small></div>
       </div>
     </div>
-    <button class="btn btn-primary" onclick="startExam()">Comenzar Examen ▸</button>
+    <button class="btn btn-primary" id="startExamBtn" onclick="startExam()">Comenzar Examen ▸</button>
   </div>
 
   <!-- BLOCK SCREEN -->
@@ -507,7 +507,7 @@ async function checkDiscordStatus(discordId){
           </div>
           <div style="margin-top:8px;font-size:13px;color:var(--txt3)">No podés volver a rendir el examen de ingreso.</div>
         </div>`;
-      document.getElementById('startExamBtn').disabled = true;
+      const _sb1 = document.getElementById('startExamBtn'); if(_sb1) _sb1.disabled = true;
     } else if(data.status === 'espera'){
       lockedOut = true;
       const hs = Math.floor(data.msRestantes/3600000);
@@ -522,10 +522,10 @@ async function checkDiscordStatus(discordId){
           </div>
           <div style="margin-top:8px;font-size:13px;color:var(--amber)">Podés volver a rendir en <b>${hs}h ${mn}m</b>.</div>
         </div>`;
-      document.getElementById('startExamBtn').disabled = true;
+      const _sb2 = document.getElementById('startExamBtn'); if(_sb2) _sb2.disabled = true;
     } else {
       lockedOut = false;
-      document.getElementById('startExamBtn').disabled = false;
+      const sb3 = document.getElementById('startExamBtn'); if(sb3) sb3.disabled = false;
       if(data.ultimo){
         const u = data.ultimo;
         statusEl.innerHTML = `
