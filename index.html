@@ -324,26 +324,8 @@
     </div>
   </header>
 
-  <!-- PANTALLA CÓDIGO DE ACCESO -->
-  <div id="codeScreen" style="max-width:420px;margin:80px auto 0;padding:0 16px">
-    <div style="background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:32px;text-align:center">
-      <div style="font-size:48px;margin-bottom:12px">🔒</div>
-      <h2 style="font-family:'Oswald',sans-serif;font-weight:600;font-size:20px;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Acceso al Examen</h2>
-      <p style="color:var(--txt2);font-size:15px;margin-bottom:24px">Ingresá el código que te dio el instructor.</p>
-      <input id="accessCode" type="text" maxlength="6" autocomplete="off" spellcheck="false" placeholder="XXXXXX"
-        style="width:100%;text-align:center;letter-spacing:8px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:700;background:var(--bg);border:2px solid var(--line2);color:var(--txt);padding:14px;border-radius:8px;outline:none;box-sizing:border-box"
-        oninput="this.value=this.value.toUpperCase().replace(/[^A-Z0-9]/g,'')"
-        onkeydown="if(event.key==='Enter')verifyCode()">
-      <div id="codeErr" style="color:var(--red);font-size:13px;margin-top:10px;min-height:18px"></div>
-      <button onclick="verifyCode()" id="codeBtn"
-        style="width:100%;margin-top:16px;background:linear-gradient(180deg,var(--blue),var(--blue-d));color:#fff;font-family:'Oswald',sans-serif;font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:1.5px;border:none;border-radius:8px;padding:14px;cursor:pointer">
-        Ingresar →
-      </button>
-    </div>
-  </div>
-
   <!-- SETUP -->
-  <div id="setup" class="setup" style="display:none">
+  <div id="setup" class="setup">
     <div id="resumeSlot"></div>
     <h2>Nueva Toma de Examen</h2>
     <p class="hint">Completá los datos y arrancá. Vas marcando cada pregunta y la nota se calcula sola.</p>
