@@ -1473,6 +1473,21 @@ window.addEventListener('beforeunload', (e)=>{
 
 /* ============ INIT ============ */
 // Cargar preguntas del servidor al iniciar
+async function verifyCode(){
+  const code=(document.getElementById('accessCode').value||'').trim().toUpperCase();
+  const err=document.getElementById('codeErr');
+  const btn=document.getElementById('codeBtn');
+  err.textContent='';
+  if(code.length<6){err.textContent='El código tiene 6 caracteres.';return;}
+  btn.disabled=true;btn.textContent='Verificando...';
+  try{
+    const r=await fetch(BACKEND_URL+'/api/code/verify',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({code})});
+    const d=await r.json();
+    if(d.ok){document.getElementById('codeScreen').style.display='none';document.getElementById('setupScreen').style.display='';}
+    else{err.textContent=d.error||'Código inválido o ya usado.';btn.disabled=false;btn.textContent='Ingresar →';}
+  }catch(e){err.textContent='Error de conexión.';btn.disabled=false;btn.textContent='Ingresar →';}
+}
+
 (async function initApp(){
   try{
     // Intentar cargar desde el servidor (actualiza preguntas si las cambiaron)
