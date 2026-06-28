@@ -448,20 +448,8 @@ function startAutoSave(){
 
 // ── REVIEW ──
 function showReview(){
-  clearInterval(timerInterval);
-  clearInterval(autoSaveInterval);
-  const list = document.getElementById('reviewList');
-  list.innerHTML = '';
-  state.questions.forEach((q, i)=>{
-    const ans = state.answers[i] || '';
-    const div = document.createElement('div');
-    div.className = 'review-q';
-    div.innerHTML = `<div class="rq-num">Pregunta ${i+1}</div>
-      <div class="rq-text">${esc(q)}</div>
-      <div class="rq-ans ${ans?'':'empty'}">${ans ? esc(ans) : 'Sin respuesta'}</div>`;
-    list.appendChild(div);
-  });
-  showScreen('screenReview');
+  // Sin revisión — va directo al envío
+  submitExam();
 }
 
 // ── SUBMIT ──
