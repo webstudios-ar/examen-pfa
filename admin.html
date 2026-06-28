@@ -730,7 +730,7 @@ async function enviarResumenDiscord(){
     const d=await r.json();
     if(d.ok){btn.textContent='✅ Enviado ('+d.total+' exám.)';btn.style.background='linear-gradient(180deg,var(--green),var(--green-d))';setTimeout(()=>{btn.textContent=orig;btn.style.background='linear-gradient(180deg,#5865f2,#4752c4)';btn.disabled=false;},3000);}
     else{await showAlert({icon:'❌',title:'Error',msg:d.error||'No se pudo enviar.',btnColor:'var(--red)'});btn.textContent=orig;btn.style.background='linear-gradient(180deg,#5865f2,#4752c4)';btn.disabled=false;}
-  }catch(e){await showAlert({icon:'❌',title:'Error de conexión',msg:'No se pudo conectar con el servidor.',btnColor:'var(--red)'});btn.textContent=orig;btn.disabled=false;}
+  }catch(e){await showAlert({icon:'❌',title:'Error de conexión',msg:'No se pudo conectar.',btnColor:'var(--red)'});btn.textContent=orig;btn.disabled=false;}
 }
 
 function closeHighModal(){document.getElementById('highModal').classList.remove('show');}
