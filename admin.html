@@ -535,6 +535,37 @@ async function doSearch(q){
 }
 
 /* ============ HIGH PFA ============ */
+const ROBOS_REF = [
+  { nombre: '🏪 Gasolinera / Tienda', min: 1, max: 3 },
+  { nombre: '🏦 Banco Fleeca', min: 3, max: 6 },
+  { nombre: '🏢 Facebook', min: 4, max: 6 },
+  { nombre: '🏠 Casa Michael', min: 3, max: 6 },
+  { nombre: '🏛 Banco Central', min: 7, max: 15 },
+  { nombre: '🏦 Maze Bank', min: 2, max: 6 },
+  { nombre: '🧪 Humane', min: 7, max: 15 },
+  { nombre: '💎 Joyería', min: 2, max: 5 },
+  { nombre: '🏟 Estadio', min: 3, max: 7 },
+  { nombre: '🚇 Subte', min: 3, max: 6 },
+  { nombre: '🏚 Rancho Abandonado', min: 4, max: 6 },
+  { nombre: '🥩 Carnicería', min: 7, max: 12 },
+  { nombre: '🛥 Yate', min: 4, max: 6 },
+  { nombre: '🏛 Museo', min: 5, max: 8 },
+  { nombre: '🏭 Fábrica', min: 7, max: 12 },
+];
+const CODIGOS_REF = [
+  '10-0: Compañero abatido','10-1: Cubrirme','10-2: Mantener posiciones',
+  '10-3: Precaución','10-4: Afirmativo','10-5: Negativo','10-6: Ocupado',
+  '10-7: Disponibles','10-8: Comisaría','10-9: Repita por favor',
+  '10-10: Salir de servicio','10-15: Sospechoso','10-20: Ubicación',
+  '10-32: Refuerzos','10-33: Patrullar','10-37: Grúa','10-38: Atención médica',
+  '10-42: Sector despejado','10-55: Falsa alarma','10-97: En camino',
+  'Código 1: Persecución','Código 2: Tiroteo','Código 3: Atraco',
+  'Código 4: Secuestro','Código 5: Proceso de detenido',
+  'AT: Tiempo de llegada estimado','QRR: Agente en peligro',
+  'Modo Charlie: Radio limpia','Clave Robert: Disparos a las ruedas',
+  'Código 100: Bloqueo','PIT: Desestabilizar vehículo',
+];
+let highMarks = {};
 let currentHighId = null;
 let currentHighTab = 'pendiente';
 
@@ -582,34 +613,62 @@ async function loadHighExams(estado){
 
 async function verHighExamen(id){
   currentHighId=id;
+  highMarks={};
   document.getElementById('highModal').classList.add('show');
   document.getElementById('highModalHead').innerHTML='<div class="loading">Cargando...</div>';
   document.getElementById('highModalBody').innerHTML='';
   document.getElementById('highCalifForm').style.display='none';
   try{
-    const r=await fetch(`${BACKEND_URL}/api/admin/high/examen/${id}`,{headers:{'X-Admin-Id':adminDiscordId}});
+    const r=await fetch(BACKEND_URL+'/api/admin/high/examen/'+id,{headers:{'X-Admin-Id':adminDiscordId}});
     if(!r.ok)throw new Error(r.status);
     const e=await r.json();
     const notaStr=e.nota!==null&&e.nota!==undefined?Number(e.nota).toFixed(1)+'/10':'Sin corregir';
-    document.getElementById('highModalHead').innerHTML=`
-      <div class="modal-title">Examen ${esc(e.examen||'A')} — ${esc(e.nombre_ic||'—')}</div>
-      <div class="modal-meta">
-        <span>Discord ID: <b>${esc(e.discord_id)}</b></span>
-        <span>Rango: <b>${esc(e.rango||'—')}</b></span>
-        <span>Enviado: <b>${fmtDatetime(e.created_at)}</b></span>
-        <span>Nota: <b>${notaStr}</b></span>
-        ${e.corrector?'<span>Corrector: <b>'+esc(e.corrector)+'</b></span>':''}
-      </div>`;
+    const aprobColor=e.nota!==null&&e.nota!==undefined?(Number(e.nota)>=7?'var(--green)':'var(--red)'):'var(--amber)';
+    document.getElementById('highModalHead').innerHTML=
+      '<div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">'+
+      '<div style="font-family:Oswald,sans-serif;font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:2px;background:var(--amber-d);color:var(--gold);padding:4px 10px;border-radius:5px;border:1px solid var(--gold-d)">EXAMEN '+esc(e.examen||'A')+'</div>'+
+      '<div style="font-family:Oswald,sans-serif;font-weight:600;font-size:20px;text-transform:uppercase">'+esc(e.nombre_ic||'—')+'</div></div>'+
+      '<div style="display:flex;flex-wrap:wrap;gap:8px">'+
+      '<span style="background:var(--panel2);border:1px solid var(--line2);border-radius:6px;padding:5px 10px;font-size:13px;font-family:JetBrains Mono,monospace"><span style="color:var(--txt3)">ID </span>'+esc(e.discord_id)+'</span>'+
+      '<span style="background:var(--panel2);border:1px solid var(--line2);border-radius:6px;padding:5px 10px;font-size:13px"><span style="color:var(--txt3)">Rango </span><b>'+esc(e.rango||'—')+'</b></span>'+
+      '<span style="background:var(--panel2);border:1px solid var(--line2);border-radius:6px;padding:5px 10px;font-size:13px"><span style="color:var(--txt3)">Enviado </span><b>'+fmtDatetime(e.created_at)+'</b></span>'+
+      '<span style="background:var(--panel2);border:1px solid '+aprobColor+';border-radius:6px;padding:5px 10px;font-size:13px;font-family:JetBrains Mono,monospace;color:'+aprobColor+'"><b>'+notaStr+'</b></span>'+
+      (e.corrector?'<span style="background:var(--panel2);border:1px solid var(--line2);border-radius:6px;padding:5px 10px;font-size:13px"><span style="color:var(--txt3)">Corrector </span><b>'+esc(e.corrector)+'</b></span>':'')+
+      '</div>';
     const resp=e.respuestas||[];
     let bh='';
     resp.forEach((rr,i)=>{
-      bh+=`<div style="margin-bottom:16px;background:var(--panel);border-radius:8px;border:1px solid var(--line);border-left:3px solid var(--gold-d);overflow:hidden">
-        <div style="padding:10px 14px 8px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:8px">
-          <span style="font-family:'JetBrains Mono',monospace;font-weight:700;font-size:11px;color:var(--gold);background:var(--amber-d);padding:2px 8px;border-radius:4px">${i+1}</span>
-          <span style="font-weight:700;font-size:14px;line-height:1.3">${esc(rr.pregunta||'')}</span>
-        </div>
-        <div style="padding:12px 14px;font-size:14px;color:var(--txt2);line-height:1.7;white-space:pre-wrap;min-height:44px">${esc(rr.respuesta||'')||'<span style="color:var(--txt3);font-style:italic">Sin respuesta</span>'}</div>
-      </div>`;
+      const pregLow=(rr.pregunta||'').toLowerCase();
+      const esRobos=pregLow.includes('mínimo y máximo')||pregLow.includes('minimo y maximo')||pregLow.includes('5 robos');
+      const esCodigos=pregLow.includes('códigos radiales')||pregLow.includes('codigos radiales');
+      let refBlock='';
+      if(esRobos){
+        let h='<div style="margin-top:10px;background:var(--bg2);border:1px solid var(--line);border-radius:6px;padding:10px 12px">';
+        h+='<div style="font-family:Oswald,sans-serif;font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--gold);margin-bottom:8px">📋 Referencia — Mínimos y Máximos</div>';
+        h+='<div style="display:grid;grid-template-columns:1fr 50px 50px;gap:4px 12px;font-size:12px">';
+        h+='<b style="color:var(--txt3)">Robo</b><b style="color:var(--txt3)">Mín</b><b style="color:var(--txt3)">Máx</b>';
+        ROBOS_REF.forEach(rob=>{h+='<span style="color:var(--txt2)">'+rob.nombre+'</span><span style="color:var(--green);font-family:JetBrains Mono,monospace">'+rob.min+'</span><span style="color:var(--amber);font-family:JetBrains Mono,monospace">'+rob.max+'</span>';});
+        h+='</div></div>';
+        refBlock=h;
+      } else if(esCodigos){
+        let h='<div style="margin-top:10px;background:var(--bg2);border:1px solid var(--line);border-radius:6px;padding:10px 12px">';
+        h+='<div style="font-family:Oswald,sans-serif;font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--gold);margin-bottom:8px">📋 Referencia — Códigos</div>';
+        h+='<div style="display:flex;flex-wrap:wrap;gap:4px 16px">';
+        CODIGOS_REF.forEach(c=>{h+='<span style="font-size:12px;color:var(--txt2);font-family:JetBrains Mono,monospace">'+c+'</span>';});
+        h+='</div></div>';
+        refBlock=h;
+      }
+      bh+='<div id="hq_'+i+'" style="margin-bottom:14px;background:var(--panel);border-radius:8px;border:1px solid var(--line);border-left:3px solid var(--gold-d);overflow:hidden;transition:border-color .2s">'+
+        '<div style="padding:10px 14px 8px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:8px">'+
+        '<span style="font-family:JetBrains Mono,monospace;font-weight:700;font-size:11px;color:var(--gold);background:var(--amber-d);padding:2px 8px;border-radius:4px">'+(i+1)+'</span>'+
+        '<span style="font-weight:700;font-size:14px;line-height:1.3;flex:1">'+esc(rr.pregunta||'')+'</span></div>'+
+        '<div style="padding:10px 14px;font-size:14px;color:var(--txt2);line-height:1.7;white-space:pre-wrap;min-height:40px">'+(esc(rr.respuesta||'')||'<span style="color:var(--txt3);font-style:italic">Sin respuesta</span>')+'</div>'+
+        refBlock+
+        '<div style="padding:8px 14px 10px;display:flex;gap:8px;border-top:1px solid var(--line);background:var(--bg)">'+
+        '<button onclick="marcarHigh('+i+',\'bien\')" id="hqb_'+i+'_bien" style="flex:1;border:1px solid var(--line2);background:transparent;color:var(--txt3);font-family:Oswald,sans-serif;font-size:12px;text-transform:uppercase;letter-spacing:1px;padding:7px 4px;border-radius:6px;cursor:pointer">✅ Bien</button>'+
+        '<button onclick="marcarHigh('+i+',\'falta\')" id="hqb_'+i+'_falta" style="flex:1;border:1px solid var(--line2);background:transparent;color:var(--txt3);font-family:Oswald,sans-serif;font-size:12px;text-transform:uppercase;letter-spacing:1px;padding:7px 4px;border-radius:6px;cursor:pointer">⚠️ Falta</button>'+
+        '<button onclick="marcarHigh('+i+',\'mal\')" id="hqb_'+i+'_mal" style="flex:1;border:1px solid var(--line2);background:transparent;color:var(--txt3);font-family:Oswald,sans-serif;font-size:12px;text-transform:uppercase;letter-spacing:1px;padding:7px 4px;border-radius:6px;cursor:pointer">❌ Mal</button>'+
+        '</div></div>';
     });
     document.getElementById('highModalBody').innerHTML=bh;
     if(e.estado==='pendiente'){
@@ -618,24 +677,38 @@ async function verHighExamen(id){
       document.getElementById('highComentario').value='';
       document.getElementById('califErr').style.display='none';
     }
-  }catch(err){document.getElementById('highModalHead').innerHTML='<div style="color:var(--red)">Error cargando</div>';}
+  }catch(err){document.getElementById('highModalHead').innerHTML='<div style="color:var(--red)">Error</div>';}
 }
 
-async function calificarHigh(){
-  const nota=document.getElementById('highNota').value;
-  const comentario=document.getElementById('highComentario').value;
-  const err=document.getElementById('califErr');
-  if(!nota||isNaN(Number(nota))||Number(nota)<0||Number(nota)>10){err.textContent='Nota invalida (0-10).';err.style.display='block';return;}
-  err.style.display='none';
-  try{
-    const r=await fetch(`${BACKEND_URL}/api/admin/high/calificar/${currentHighId}`,{
-      method:'PATCH',headers:{'Content-Type':'application/json','X-Admin-Id':adminDiscordId},
-      body:JSON.stringify({nota:Number(nota),comentario})
-    });
-    if(!r.ok)throw new Error(r.status);
-    closeHighModal();
-    loadHighExams(currentHighTab);
-  }catch(e){err.textContent='Error al guardar.';err.style.display='block';}
+function marcarHigh(idx,marca){
+  highMarks[idx]=marca;
+  ['bien','falta','mal'].forEach(m=>{
+    const btn=document.getElementById('hqb_'+idx+'_'+m);
+    if(!btn)return;
+    const cols={bien:'var(--green)',falta:'var(--amber)',mal:'var(--red)'};
+    const activo=m===marca;
+    btn.style.background=activo?cols[m]:'transparent';
+    btn.style.color=activo?'#000':'var(--txt3)';
+    btn.style.borderColor=activo?cols[m]:'var(--line2)';
+    btn.style.fontWeight=activo?'700':'400';
+  });
+  const card=document.getElementById('hq_'+idx);
+  if(card){const c={bien:'var(--green)',falta:'var(--amber)',mal:'var(--red)'};card.style.borderLeftColor=c[marca];}
+  calcNotaSugerida();
+}
+
+function calcNotaSugerida(){
+  const vals={bien:1,falta:0.5,mal:0};
+  const marcadas=Object.values(highMarks);
+  if(!marcadas.length)return;
+  const suma=marcadas.reduce((a,m)=>a+(vals[m]||0),0);
+  const sugerida=(suma/13*10).toFixed(1);
+  const inp=document.getElementById('highNota');
+  if(inp)inp.value=sugerida;
+  let el=document.getElementById('notaSugeridaLabel');
+  if(!el){el=document.createElement('div');el.id='notaSugeridaLabel';el.style='font-family:JetBrains Mono,monospace;font-size:12px;color:var(--txt3);margin-top:6px';if(inp)inp.parentNode.appendChild(el);}
+  const b=marcadas.filter(m=>m==='bien').length,f=marcadas.filter(m=>m==='falta').length,x=marcadas.filter(m=>m==='mal').length;
+  el.textContent='✅'+b+' ⚠️'+f+' ❌'+x+' de 13 → sugerida: '+sugerida+'/10';
 }
 
 function closeHighModal(){document.getElementById('highModal').classList.remove('show');}
