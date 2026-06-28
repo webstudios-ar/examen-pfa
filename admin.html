@@ -736,6 +736,43 @@ async function enviarResumenDiscord(){
   }catch(e){await showAlert({icon:'❌',title:'Error de conexión',msg:'No se pudo conectar.',btnColor:'var(--red)'});btn.textContent=orig;btn.disabled=false;}
 }
 
+function showConfirm({icon='⚠️',title,msg,confirmText='Confirmar',confirmColor='var(--red)'}){
+  return new Promise(resolve=>{
+    const m=document.getElementById('customModal');
+    const cc=document.getElementById('cmConfirm');
+    const ca=document.getElementById('cmCancel');
+    document.getElementById('cmIcon').textContent=icon;
+    document.getElementById('cmTitle').textContent=title;
+    document.getElementById('cmMsg').textContent=msg;
+    cc.textContent=confirmText;
+    cc.style.background=confirmColor;
+    cc.style.color='#fff';
+    ca.style.display='';
+    m.style.display='flex';
+    const yes=()=>{m.style.display='none';cc.removeEventListener('click',yes);ca.removeEventListener('click',no);resolve(true);};
+    const no=()=>{m.style.display='none';cc.removeEventListener('click',yes);ca.removeEventListener('click',no);resolve(false);};
+    cc.addEventListener('click',yes);
+    ca.addEventListener('click',no);
+    m.addEventListener('click',e=>{if(e.target===m)no();},{once:true});
+  });
+}
+function showAlert({icon='ℹ️',title,msg,btnText='Entendido',btnColor='var(--blue)'}){
+  return new Promise(resolve=>{
+    const m=document.getElementById('customModal');
+    const cc=document.getElementById('cmConfirm');
+    const ca=document.getElementById('cmCancel');
+    document.getElementById('cmIcon').textContent=icon;
+    document.getElementById('cmTitle').textContent=title;
+    document.getElementById('cmMsg').textContent=msg;
+    cc.textContent=btnText;
+    cc.style.background=btnColor;
+    cc.style.color='#fff';
+    ca.style.display='none';
+    m.style.display='flex';
+    const done=()=>{m.style.display='none';ca.style.display='';cc.removeEventListener('click',done);resolve();};
+    cc.addEventListener('click',done);
+  });
+}
 function closeHighModal(){document.getElementById('highModal').classList.remove('show');}
 document.getElementById('highModal').addEventListener('click',e=>{if(e.target===document.getElementById('highModal'))closeHighModal();});
 
