@@ -226,7 +226,7 @@ footer{text-align:center;color:var(--txt3);font-size:11px;font-family:'JetBrains
       <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end">
         <div>
           <label style="display:block;font-family:'Oswald',sans-serif;font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--txt3);margin-bottom:6px">Nota (0-10)</label>
-          <input id="highNota" type="number" min="0" max="10" step="0.5" placeholder="8.5" style="width:90px;background:var(--bg);border:1px solid var(--line2);color:var(--txt);font-family:'JetBrains Mono',monospace;font-size:18px;padding:10px 12px;border-radius:7px;text-align:center;outline:none" onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--line2)'">
+          <input id="highNota" type="number" min="0" max="10" step="0.5" placeholder="—" readonly style="width:90px;background:var(--panel2);border:1px solid var(--line);color:var(--gold);font-family:'JetBrains Mono',monospace;font-size:18px;padding:10px 12px;border-radius:7px;text-align:center;outline:none;cursor:default">
         </div>
         <div style="flex:1;min-width:200px">
           <label style="display:block;font-family:'Oswald',sans-serif;font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--txt3);margin-bottom:6px">Comentario (opcional)</label>
@@ -681,6 +681,13 @@ async function verHighExamen(id){
 }
 
 function marcarHigh(idx,marca){
+  if(highMarks[idx]===marca){
+    delete highMarks[idx];
+    ['bien','falta','mal'].forEach(m=>{const btn=document.getElementById('hqb_'+idx+'_'+m);if(btn){btn.style.background='transparent';btn.style.color='var(--txt3)';btn.style.borderColor='var(--line2)';btn.style.fontWeight='400';}});
+    const card=document.getElementById('hq_'+idx);
+    if(card)card.style.borderLeftColor='var(--gold-d)';
+    calcNotaSugerida();return;
+  }
   highMarks[idx]=marca;
   ['bien','falta','mal'].forEach(m=>{
     const btn=document.getElementById('hqb_'+idx+'_'+m);
@@ -700,15 +707,15 @@ function marcarHigh(idx,marca){
 function calcNotaSugerida(){
   const vals={bien:1,falta:0.5,mal:0};
   const marcadas=Object.values(highMarks);
-  if(!marcadas.length)return;
+  const inp=document.getElementById('highNota');
+  let el=document.getElementById('notaSugeridaLabel');
+  if(!el&&inp){el=document.createElement('div');el.id='notaSugeridaLabel';el.style='font-family:JetBrains Mono,monospace;font-size:12px;color:var(--txt3);margin-top:6px';inp.parentNode.appendChild(el);}
+  if(!marcadas.length){if(inp)inp.value='';if(el)el.textContent='Marcá cada pregunta para calcular la nota';return;}
   const suma=marcadas.reduce((a,m)=>a+(vals[m]||0),0);
   const sugerida=(suma/13*10).toFixed(1);
-  const inp=document.getElementById('highNota');
   if(inp)inp.value=sugerida;
-  let el=document.getElementById('notaSugeridaLabel');
-  if(!el){el=document.createElement('div');el.id='notaSugeridaLabel';el.style='font-family:JetBrains Mono,monospace;font-size:12px;color:var(--txt3);margin-top:6px';if(inp)inp.parentNode.appendChild(el);}
-  const b=marcadas.filter(m=>m==='bien').length,f=marcadas.filter(m=>m==='falta').length,x=marcadas.filter(m=>m==='mal').length;
-  el.textContent='✅'+b+' ⚠️'+f+' ❌'+x+' de 13 → sugerida: '+sugerida+'/10';
+  const b=marcadas.filter(m=>m==='bien').length,f=marcadas.filter(m=>m==='falta').length,x=marcadas.filter(m=>m==='mal').length,sin=13-b-f-x;
+  if(el)el.textContent='✅'+b+' ⚠️'+f+' ❌'+x+(sin?' ⬜'+sin+' sin marcar':'')+' → '+sugerida+'/10';
 }
 
 function closeHighModal(){document.getElementById('highModal').classList.remove('show');}
