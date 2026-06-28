@@ -586,11 +586,9 @@ function switchTab(tab){
 
 async function loadHighExams(estado){
   currentHighTab=estado;
-  // Actualizar estilo de tabs
-  const bp=document.getElementById('btnPendientes');
-  const bc=document.getElementById('btnCorregidos');
-  if(bp){bp.style.background=estado==='pendiente'?'var(--amber-d)':'transparent';bp.style.borderColor=estado==='pendiente'?'var(--gold)':'var(--line2)';bp.style.color=estado==='pendiente'?'var(--gold)':'var(--txt2)';}
-  if(bc){bc.style.background=estado==='corregido'?'var(--green-d)':'transparent';bc.style.borderColor=estado==='corregido'?'var(--green)':'var(--line2)';bc.style.color=estado==='corregido'?'var(--green)':'var(--txt2)';}
+  const _bp=document.getElementById('btnPendientes'),_bc=document.getElementById('btnCorregidos');
+  if(_bp){if(estado==='pendiente'){_bp.style.background='var(--amber-d)';_bp.style.borderColor='var(--gold)';_bp.style.color='var(--gold)';}else{_bp.style.background='transparent';_bp.style.borderColor='var(--line2)';_bp.style.color='var(--txt2)';}}
+  if(_bc){if(estado==='corregido'){_bc.style.background='var(--green-d)';_bc.style.borderColor='var(--green)';_bc.style.color='var(--green)';}else{_bc.style.background='transparent';_bc.style.borderColor='var(--line2)';_bc.style.color='var(--txt2)';}}
   document.getElementById('highList').innerHTML='<div class="loading">Cargando...</div>';
   try{
     const r=await fetch(BACKEND_URL+'/api/admin/high/list?estado='+estado,{headers:{'X-Admin-Id':adminDiscordId}});
