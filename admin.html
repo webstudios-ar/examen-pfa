@@ -676,6 +676,7 @@ async function verHighExamen(id){
       document.getElementById('highNota').value='';
       document.getElementById('highComentario').value='';
       document.getElementById('califErr').style.display='none';
+      let _l=document.getElementById('notaSugeridaLabel');if(!_l){_l=document.createElement('div');_l.id='notaSugeridaLabel';_l.style='font-family:JetBrains Mono,monospace;font-size:12px;color:var(--txt3);margin-top:6px';document.getElementById('highNota').parentNode.appendChild(_l);}_l.textContent='Marcá cada pregunta para calcular la nota';
     }
   }catch(err){document.getElementById('highModalHead').innerHTML='<div style="color:var(--red)">Error</div>';}
 }
