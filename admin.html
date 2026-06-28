@@ -720,80 +720,19 @@ async function eliminarCodigo(id){const _ok=await showConfirm({icon:'🗑️',ti
 let currentStatsPeriodo='semana';
 async function cargarStats(p){currentStatsPeriodo=p;const bs=document.getElementById('btnStatsSemana'),bm=document.getElementById('btnStatsMes');if(bs){bs.style.background=p==='semana'?'var(--blue-d)':'transparent';bs.style.borderColor=p==='semana'?'var(--blue)':'var(--line2)';bs.style.color=p==='semana'?'#fff':'var(--txt2)';}if(bm){bm.style.background=p==='mes'?'var(--blue-d)':'transparent';bm.style.borderColor=p==='mes'?'var(--blue)':'var(--line2)';bm.style.color=p==='mes'?'#fff':'var(--txt2)';}document.getElementById('statsContent').innerHTML='<div class="loading">Cargando...</div>';try{const r=await fetch(BACKEND_URL+'/api/admin/stats/instructores?periodo='+p,{headers:{'X-Admin-Id':adminDiscordId}});const res=await r.json();if(!res.data||!res.data.length){document.getElementById('statsContent').innerHTML='<div class="empty-state">Sin exámenes</div>';return;}let h=`<div style="margin-bottom:12px;font-size:12px;color:var(--txt3)">Total: <b style="color:var(--blue)">${res.total_examenes}</b></div><div class="inst-card"><div style="display:grid;grid-template-columns:1fr 60px 60px 60px 60px;gap:8px;padding:10px 14px;border-bottom:2px solid var(--line);background:var(--panel2)"><b style="font-size:11px;color:var(--txt3)">Instructor</b><b style="font-size:11px;color:var(--txt3);text-align:center">Total</b><b style="font-size:11px;color:var(--green);text-align:center">✅</b><b style="font-size:11px;color:var(--red);text-align:center">❌</b><b style="font-size:11px;color:var(--txt3);text-align:center">Nota</b></div>`;res.data.forEach(inst=>{const pct=inst.total>0?Math.round(inst.aprobados/inst.total*100):0,bc=pct>=70?'var(--green)':pct>=40?'var(--amber)':'var(--red)';h+=`<div style="display:grid;grid-template-columns:1fr 60px 60px 60px 60px;gap:8px;padding:10px 14px;border-bottom:1px solid var(--line);align-items:center"><div><div style="font-weight:700;font-size:14px">${esc(inst.instructor)}</div><div style="margin-top:4px;background:var(--line);border-radius:3px;height:4px"><div style="height:100%;width:${pct}%;background:${bc};border-radius:3px"></div></div></div><div style="text-align:center;font-weight:700;font-size:18px">${inst.total}</div><div style="text-align:center;font-weight:700;color:var(--green)">${inst.aprobados}</div><div style="text-align:center;font-weight:700;color:var(--red)">${inst.reprobados}</div><div style="text-align:center;font-size:13px;color:var(--txt2)">${inst.promedio||'-'}</div></div>`;});h+='</div>';document.getElementById('statsContent').innerHTML=h;}catch(e){document.getElementById('statsContent').innerHTML='<div class="empty-state">Error</div>';}}
 async function enviarResumenDiscord(){
-  const _ok2=await showConfirm({icon:'📤',title:'Enviar resumen',msg:'Se enviará el resumen al canal de Discord. ¿Confirmás?',confirmText:'Enviar',confirmColor:'linear-gradient(180deg,#5865f2,#4752c4)'});if(!_ok2)return;
-
-  const _per=currentStatsPeriodo||'mes';const _ok=await showConfirm({icon:'📤',title:'Enviar resumen a Discord',msg:'Se va a enviar el resumen del '+((_per==='mes')?'mes':'semana')+' al canal configurado en Discord.',confirmText:'Enviar',confirmColor:'linear-gradient(180deg,#5865f2,#4752c4)'});if(!_ok)return;
-  
-  const periodo=currentStatsPeriodo||'mes';
-  const periodoNombre=periodo==='mes'?'del mes':'de esta semana';
-  const ok=await showConfirm({icon:'📤',title:'Enviar resumen a Discord',msg:'Se va a enviar el resumen '+periodoNombre+' al canal de Discord configurado. ¿Confirmás?',confirmText:'Enviar',confirmColor:'linear-gradient(180deg,#5865f2,#4752c4)',cancelText:'Cancelar'});
-  if(!ok)return;
+  const _ok=await showConfirm({icon:'📤',title:'Enviar resumen a Discord',msg:'Se enviará el resumen del '+(currentStatsPeriodo==='mes'?'mes':'semana')+' al canal de Discord configurado.',confirmText:'Enviar',confirmColor:'linear-gradient(180deg,#5865f2,#4752c4)'});
+  if(!_ok)return;
   const btn=document.getElementById('btnEnviarStats');
   const orig=btn.textContent;
   btn.disabled=true;btn.textContent='Enviando...';
   try{
-    const r=await fetch(BACKEND_URL+'/api/admin/stats/enviar',{
-      method:'POST',
-      headers:{'Content-Type':'application/json','X-Admin-Id':adminDiscordId},
-      body:JSON.stringify({periodo:currentStatsPeriodo||'mes',es_cierre:false})
-    });
+    const r=await fetch(BACKEND_URL+'/api/admin/stats/enviar',{method:'POST',headers:{'Content-Type':'application/json','X-Admin-Id':adminDiscordId},body:JSON.stringify({periodo:currentStatsPeriodo||'mes',es_cierre:false})});
     const d=await r.json();
-    if(d.ok){
-      btn.textContent='✅ Enviado ('+d.total+' exám.)';
-      btn.style.background='linear-gradient(180deg,var(--green),var(--green-d))';
-      setTimeout(()=>{btn.textContent=orig;btn.style.background='linear-gradient(180deg,#5865f2,#4752c4)';btn.disabled=false;},3000);
-    } else {
-      btn.textContent='❌ '+( d.error||'Error');
-      btn.style.background='linear-gradient(180deg,var(--red),var(--red-d))';
-      setTimeout(()=>{btn.textContent=orig;btn.style.background='linear-gradient(180deg,#5865f2,#4752c4)';btn.disabled=false;},3000);
-    }
-  }catch(e){btn.textContent='❌ Error conexión';setTimeout(()=>{btn.textContent=orig;btn.disabled=false;},3000);}
+    if(d.ok){btn.textContent='✅ Enviado ('+d.total+' exám.)';btn.style.background='linear-gradient(180deg,var(--green),var(--green-d))';setTimeout(()=>{btn.textContent=orig;btn.style.background='linear-gradient(180deg,#5865f2,#4752c4)';btn.disabled=false;},3000);}
+    else{await showAlert({icon:'❌',title:'Error',msg:d.error||'No se pudo enviar.',btnColor:'var(--red)'});btn.textContent=orig;btn.style.background='linear-gradient(180deg,#5865f2,#4752c4)';btn.disabled=false;}
+  }catch(e){await showAlert({icon:'❌',title:'Error de conexión',msg:'No se pudo conectar con el servidor.',btnColor:'var(--red)'});btn.textContent=orig;btn.disabled=false;}
 }
 
-
-/* ============ MODAL PERSONALIZADO ============ */
-function showConfirm({icon='⚠️', title, msg, confirmText='Confirmar', confirmColor='var(--red)', cancelText='Cancelar'}){
-  return new Promise(resolve=>{
-    const m=document.getElementById('customModal');
-    document.getElementById('cmIcon').textContent=icon;
-    document.getElementById('cmTitle').textContent=title;
-    document.getElementById('cmMsg').textContent=msg;
-    const cc=document.getElementById('cmConfirm');
-    cc.textContent=confirmText;
-    cc.style.background=confirmColor;
-    cc.style.color=confirmColor.includes('gold')||confirmColor.includes('amber')||confirmColor.includes('e8b')?'#000':'#fff';
-    document.getElementById('cmCancel').textContent=cancelText;
-    m.style.display='flex';
-    const yes=()=>{m.style.display='none';cc.removeEventListener('click',yes);document.getElementById('cmCancel').removeEventListener('click',no);resolve(true);};
-    const no=()=>{m.style.display='none';cc.removeEventListener('click',yes);document.getElementById('cmCancel').removeEventListener('click',no);resolve(false);};
-    cc.addEventListener('click',yes);
-    document.getElementById('cmCancel').addEventListener('click',no);
-    m.addEventListener('click',e=>{if(e.target===m){no();}},{once:true});
-  });
-}
-
-function showAlert({icon='ℹ️', title, msg, btnText='Entendido', btnColor='var(--blue)'}){
-  return new Promise(resolve=>{
-    const m=document.getElementById('customModal');
-    document.getElementById('cmIcon').textContent=icon;
-    document.getElementById('cmTitle').textContent=title;
-    document.getElementById('cmMsg').textContent=msg;
-    const cc=document.getElementById('cmConfirm');
-    cc.textContent=btnText;
-    cc.style.background=btnColor;
-    cc.style.color='#fff';
-    const cancelBtn=document.getElementById('cmCancel');
-    cancelBtn.style.display='none';
-    m.style.display='flex';
-    const done=()=>{m.style.display='none';cancelBtn.style.display='';cc.removeEventListener('click',done);resolve();};
-    cc.addEventListener('click',done);
-  });
-}
-
-function showConfirm({icon='⚠️',title,msg,confirmText='Confirmar',confirmColor='var(--red)'}){return new Promise(resolve=>{const m=document.getElementById('customModal');document.getElementById('cmIcon').textContent=icon;document.getElementById('cmTitle').textContent=title;document.getElementById('cmMsg').textContent=msg;const cc=document.getElementById('cmConfirm');cc.textContent=confirmText;cc.style.background=confirmColor;cc.style.color='#fff';const ca=document.getElementById('cmCancel');ca.style.display='';m.style.display='flex';const yes=()=>{m.style.display='none';cc.removeEventListener('click',yes);ca.removeEventListener('click',no);resolve(true);};const no=()=>{m.style.display='none';cc.removeEventListener('click',yes);ca.removeEventListener('click',no);resolve(false);};cc.addEventListener('click',yes);ca.addEventListener('click',no);m.addEventListener('click',e=>{if(e.target===m)no();},{once:true});});}
-function showAlert({icon='ℹ️',title,msg,btnText='Entendido',btnColor='var(--blue)'}){return new Promise(resolve=>{const m=document.getElementById('customModal');document.getElementById('cmIcon').textContent=icon;document.getElementById('cmTitle').textContent=title;document.getElementById('cmMsg').textContent=msg;const cc=document.getElementById('cmConfirm');cc.textContent=btnText;cc.style.background=btnColor;cc.style.color='#fff';const ca=document.getElementById('cmCancel');ca.style.display='none';m.style.display='flex';const done=()=>{m.style.display='none';ca.style.display='';cc.removeEventListener('click',done);resolve();};cc.addEventListener('click',done);});}
-function showConfirm({icon='⚠️',title,msg,confirmText='Confirmar',confirmColor='var(--red)'}){return new Promise(resolve=>{const m=document.getElementById('customModal'),cc=document.getElementById('cmConfirm'),ca=document.getElementById('cmCancel');document.getElementById('cmIcon').textContent=icon;document.getElementById('cmTitle').textContent=title;document.getElementById('cmMsg').textContent=msg;cc.textContent=confirmText;cc.style.background=confirmColor;cc.style.color='#fff';ca.style.display='';m.style.display='flex';const yes=()=>{m.style.display='none';cc.removeEventListener('click',yes);ca.removeEventListener('click',no);resolve(true);};const no=()=>{m.style.display='none';cc.removeEventListener('click',yes);ca.removeEventListener('click',no);resolve(false);};cc.addEventListener('click',yes);ca.addEventListener('click',no);m.addEventListener('click',e=>{if(e.target===m)no();},{once:true});});}
-function showAlert({icon='ℹ️',title,msg,btnText='Entendido',btnColor='var(--blue)'}){return new Promise(resolve=>{const m=document.getElementById('customModal'),cc=document.getElementById('cmConfirm'),ca=document.getElementById('cmCancel');document.getElementById('cmIcon').textContent=icon;document.getElementById('cmTitle').textContent=title;document.getElementById('cmMsg').textContent=msg;cc.textContent=btnText;cc.style.background=btnColor;cc.style.color='#fff';ca.style.display='none';m.style.display='flex';const done=()=>{m.style.display='none';ca.style.display='';cc.removeEventListener('click',done);resolve();};cc.addEventListener('click',done);});}
 function closeHighModal(){document.getElementById('highModal').classList.remove('show');}
 document.getElementById('highModal').addEventListener('click',e=>{if(e.target===document.getElementById('highModal'))closeHighModal();});
 
