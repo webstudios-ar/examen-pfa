@@ -472,7 +472,7 @@ function lsDel(k){ try{ localStorage.removeItem(k); }catch(e){} }
 /* La API key vive en el backend (Railway), NUNCA en el navegador.
    Acá solo le pegamos a nuestros endpoints. Cambiá BACKEND_URL por la
    URL de tu deploy de Railway. */
-const BACKEND_URL = 'https://examen-pfa-backend-production.up.railway.app';
+const BACKEND_URL = 'https://api.pfakilomborp.net';
 
 /* Devuelve {status:'libre'|'aprobado'|'espera'|'error', last, msRestantes, msg}.
    Reglas: si alguna vez aprobó -> 'aprobado' (bloqueo permanente).
