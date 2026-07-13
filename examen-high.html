@@ -198,6 +198,22 @@ header .badge-row{display:none}
 .exam-badge{color:var(--violet2)!important;border-color:var(--violet)!important;box-shadow:0 0 24px rgba(139,92,246,.3)}
 .topbar{background:rgba(8,12,20,.82)!important;backdrop-filter:blur(12px)}
 .sub{color:var(--violet2)!important}
+
+  /* ================= HUB · fondo a pantalla completa + landing centrado ================= */
+  body::before, body::after{ display:none !important; }
+  body{
+    background:
+      radial-gradient(circle at 15% -5%, rgba(139,92,246,.22), transparent 46%),
+      radial-gradient(circle at 88% 8%, rgba(47,107,255,.15), transparent 46%),
+      linear-gradient(rgba(6,6,13,.80), rgba(6,6,13,.93)),
+      url('patrullero.jpg') center 35% / cover fixed no-repeat,
+      #06060d !important;
+  }
+  .setup.portal{ min-height:80vh; align-content:center; }
+  .pb-bg{ display:none !important; }
+  .portal-brand{ background:linear-gradient(160deg, rgba(21,16,40,.62), rgba(9,8,16,.72)) !important; -webkit-backdrop-filter:blur(7px); backdrop-filter:blur(7px); }
+  .portal-form{ display:flex; flex-direction:column; justify-content:center; background:linear-gradient(180deg, rgba(24,34,50,.70), rgba(11,17,28,.80)) !important; -webkit-backdrop-filter:blur(9px); backdrop-filter:blur(9px); }
+  @media(max-width:820px){ .setup.portal{ min-height:auto; } }
 </style>
 </head>
 <body>
@@ -206,7 +222,7 @@ header .badge-row{display:none}
 <header>
   <div class="hd-baliza"></div>
   <div class="hd-brand">
-    <img src="logo.png?v=2" alt="" onerror="this.style.display='none'">
+    <img src="logo-pfa.png" alt="" onerror="this.style.display='none'">
     <span class="hd-name">P.F.A. <b>Ascenso HIGH</b></span>
   </div>
 </header>
@@ -215,9 +231,9 @@ header .badge-row{display:none}
 <div id="screenAuth" class="screen active">
   <div class="setup portal">
     <aside class="portal-brand">
-      <img class="pb-bg" src="fondo.jpg?v=2" alt="" onerror="this.remove()">
+      <img class="pb-bg" src="patrullero.jpg" alt="" onerror="this.remove()">
       <div class="pb-top"><span class="gs-live"></span> ACCESO VERIFICADO <span class="pb-sep">//</span> COMISARIO MAYOR</div>
-      <div class="pb-crest"><img src="logo.png?v=2" class="pb-logo" alt="PFA Kilombo" onerror="this.style.display='none'"></div>
+      <div class="pb-crest"><img src="logo-pfa.png" class="pb-logo" alt="PFA Kilombo" onerror="this.style.display='none'"></div>
       <div class="eyebrow">Evaluación Interna · Ascenso</div>
       <h1 class="pb-title">Examen<br>Ascenso <span>HIGH</span></h1>
       <p class="pb-lead">Este examen es solo para el rango <strong>Comisario Mayor</strong>. Iniciá sesión con Discord y la página verifica tu rango automáticamente.</p>
@@ -236,9 +252,9 @@ header .badge-row{display:none}
 <div id="screenCode" class="screen">
   <div class="setup portal">
     <aside class="portal-brand">
-      <img class="pb-bg" src="fondo.jpg?v=2" alt="" onerror="this.remove()">
+      <img class="pb-bg" src="patrullero.jpg" alt="" onerror="this.remove()">
       <div class="pb-top"><span class="gs-live"></span> ACCESO INTERNO <span class="pb-sep">//</span> HIGH PFA</div>
-      <div class="pb-crest"><img src="logo.png?v=2" class="pb-logo" alt="PFA Kilombo" onerror="this.style.display='none'"></div>
+      <div class="pb-crest"><img src="logo-pfa.png" class="pb-logo" alt="PFA Kilombo" onerror="this.style.display='none'"></div>
       <div class="eyebrow">Evaluación Interna · Ascenso</div>
       <h1 class="pb-title">Examen<br>Ascenso <span>HIGH</span></h1>
       <p class="pb-lead">Ingresá el código que te dio el instructor para acceder al examen de ascenso a High PFA.</p>
