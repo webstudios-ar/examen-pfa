@@ -207,10 +207,17 @@ header .badge-row{display:none}
       url('patrullero.jpg') center 35% / cover fixed no-repeat,
       #06060d !important;
   }
-  .setup.portal{ min-height:80vh; align-content:center; }
   .pb-bg{ display:none !important; }
   .portal-brand{ background:linear-gradient(160deg, rgba(21,16,40,.62), rgba(9,8,16,.72)) !important; -webkit-backdrop-filter:blur(7px); backdrop-filter:blur(7px); }
-  .portal-form{ display:flex; flex-direction:column; justify-content:center; background:linear-gradient(180deg, rgba(24,34,50,.70), rgba(11,17,28,.80)) !important; -webkit-backdrop-filter:blur(9px); backdrop-filter:blur(9px); }
+  .portal-form{ background:linear-gradient(180deg, rgba(24,34,50,.70), rgba(11,17,28,.80)) !important; -webkit-backdrop-filter:blur(9px); backdrop-filter:blur(9px); }
+
+  /* ===== ENCUADRE FINAL: cada panel arranca desde arriba, altura natural ===== */
+  .setup.portal{ align-items:start !important; align-content:start !important; min-height:0 !important; margin:26px 0 0 !important; }
+  .portal-brand{ display:block !important; }
+  .portal-form{ display:block !important; }
+  .pb-glow{ position:absolute !important; }
+  .pb-chips{ margin-bottom:0 !important; }
+  .pb-motto{ margin-top:26px !important; }
   @media(max-width:820px){ .setup.portal{ min-height:auto; } }
 </style>
 </head>
