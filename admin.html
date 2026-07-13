@@ -196,6 +196,22 @@ header .badge-row{display:none}
 .ver-btn:hover{background:rgba(139,92,246,.2)!important}
 .part-label,.sub{color:var(--violet2)!important}
 .modal{background:linear-gradient(180deg,var(--panel),var(--bg2))!important;border-color:var(--line2)!important;box-shadow:0 0 44px rgba(139,92,246,.14),var(--shadow-lg)!important}
+
+  /* ================= HUB · fondo a pantalla completa + landing centrado ================= */
+  body::before, body::after{ display:none !important; }
+  body{
+    background:
+      radial-gradient(circle at 15% -5%, rgba(139,92,246,.22), transparent 46%),
+      radial-gradient(circle at 88% 8%, rgba(47,107,255,.15), transparent 46%),
+      linear-gradient(rgba(6,6,13,.80), rgba(6,6,13,.93)),
+      url('patrullero.jpg') center 35% / cover fixed no-repeat,
+      #06060d !important;
+  }
+  .setup.portal{ min-height:80vh; align-content:center; }
+  .pb-bg{ display:none !important; }
+  .portal-brand{ background:linear-gradient(160deg, rgba(21,16,40,.62), rgba(9,8,16,.72)) !important; -webkit-backdrop-filter:blur(7px); backdrop-filter:blur(7px); }
+  .portal-form{ display:flex; flex-direction:column; justify-content:center; background:linear-gradient(180deg, rgba(24,34,50,.70), rgba(11,17,28,.80)) !important; -webkit-backdrop-filter:blur(9px); backdrop-filter:blur(9px); }
+  @media(max-width:820px){ .setup.portal{ min-height:auto; } }
 </style>
 </head>
 <body>
@@ -204,7 +220,7 @@ header .badge-row{display:none}
 <header>
   <div class="hd-baliza"></div>
   <div class="hd-brand">
-    <img src="logo.png?v=2" alt="" onerror="this.style.display='none'">
+    <img src="logo-pfa.png" alt="" onerror="this.style.display='none'">
     <span class="hd-name">P.F.A. <b>Panel Admin</b></span>
   </div>
 </header>
@@ -213,9 +229,9 @@ header .badge-row{display:none}
 <div id="loginScreen">
   <div class="setup portal">
     <aside class="portal-brand">
-      <img class="pb-bg" src="fondo.jpg?v=2" alt="" onerror="this.remove()">
+      <img class="pb-bg" src="patrullero.jpg" alt="" onerror="this.remove()">
       <div class="pb-top"><span class="gs-live"></span> PANEL INTERNO <span class="pb-sep">//</span> SOLO HEAD</div>
-      <div class="pb-crest"><img src="logo.png?v=2" class="pb-logo" alt="PFA Kilombo" onerror="this.style.display='none'"></div>
+      <div class="pb-crest"><img src="logo-pfa.png" class="pb-logo" alt="PFA Kilombo" onerror="this.style.display='none'"></div>
       <div class="eyebrow">Registro de Exámenes · Administración</div>
       <h1 class="pb-title">Panel<br><span>Admin</span></h1>
       <p class="pb-lead">Acceso restringido a la conducción de la PFA. Autenticá tu identidad para ver los registros de exámenes.</p>
